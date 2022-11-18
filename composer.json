@@ -37,7 +37,9 @@
         "kartik-v/yii2-widget-growl": "*",
         "kartik-v/yii2-widget-fileinput": "dev-master",
         "phpoffice/phpspreadsheet": "dev-master",
-        "giggsey/libphonenumber-for-php": "dev-master"
+        "giggsey/libphonenumber-for-php": "dev-master",
+        "yiisoft/yii2-jui": "2.0",
+        "symfony/google-mailer": "6.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

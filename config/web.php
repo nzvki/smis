@@ -7,7 +7,7 @@ use app\modules\studentRecords\Module;
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
-
+$smDb = require __DIR__ . '/sm_db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
@@ -48,7 +48,7 @@ $config = [
             ],
         ],
         'db' => $db,
-
+        'sm_db' => $smDb,
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -57,7 +57,6 @@ $config = [
                 'logout' => 'site/logout',
             ],
         ],
-
     ],
     'params' => $params,
     'modules' => [
@@ -67,15 +66,16 @@ $config = [
         'setup' => [
             'class' => \app\modules\setup\Module::class,
         ],
-
         'functionalSetup' => [
-        'class' => 'app\modules\functionalSetup\Module',
+            'class' => 'app\modules\functionalSetup\Module',
         ],
-
-
-
+        'student-registration' => [
+            'class' => 'app\modules\studentRegistration\Module',
+        ],
         // Other TP Modules
-        'gridview' => ['class' => \kartik\grid\Module::class,],
+        'gridview' => [
+            'class' => \kartik\grid\Module::class
+        ]
     ],
 ];
 

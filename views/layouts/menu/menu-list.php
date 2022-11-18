@@ -11,7 +11,7 @@ return [
     ["name"=>"Student ID","rl"=>"/student-id","desc"=>"A short description of the module","icon"=>"person-badge-fill","active"=>false,],
     ["name"=>"Application portal","rl"=>"#","desc"=>"A short description of the module","icon"=>"optical-audio","active"=>false,],
     ["name"=>"Admission","rl"=>"/admission","desc"=>"A short description of the module","icon"=>"folder-plus","active"=>false,],
-    ["name"=>"Students’ registration","rl"=>"/student-registration","desc"=>"A short description of the module","icon"=>"person-lines-fill","active"=>false,],
+    ["name"=>"Students’ registration","rl"=>"student-registration","desc"=>"A short description of the module","icon"=>"person-lines-fill","active"=>true,],
     ["name"=>"Setup","rl"=>"/setup","desc"=>"A short description of the module","icon"=>"wrench-adjustable","active"=>true,],
     ["name"=>"Functional<br/> Setup","rl"=>"functionalSetup","desc"=>"A short description of the module","icon"=>"gear-wide","active"=>true,],
 ];
