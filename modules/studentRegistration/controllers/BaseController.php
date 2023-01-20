@@ -12,6 +12,10 @@ use yii\web\ServerErrorHttpException;
 
 class BaseController extends Controller
 {
+    const REGISTERED_STATUS = 'REGISTERED';
+
+    const PRE_REGISTERED_STATUS = 'PRE-REGISTRATION';
+
     /**
      * Setup controllers with initial data
      * @return void

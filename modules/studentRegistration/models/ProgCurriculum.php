@@ -5,10 +5,11 @@
 
 namespace app\modules\studentRegistration\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "smisportal.org_programme_curriculum".
+ * This is the model class for table "org_programme_curriculum".
  *
  * @property int $prog_curriculum_id
  * @property int $prog_id
@@ -26,8 +27,10 @@ use yii\db\ActiveRecord;
  * @property int $grading_system_id
  * @property string $status
  * @property string|null $approval_date
+ *
+ * @property Programme $programme
  */
-class ProgrammeCurriculum extends ActiveRecord
+class ProgCurriculum extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -43,15 +46,13 @@ class ProgrammeCurriculum extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['prog_curriculum_id', 'prog_id', 'prog_curriculum_desc', 'duration', 'pass_mark', 'start_date', 'prog_cur_prefix', 'grading_system_id'], 'required'],
-            [['prog_curriculum_id', 'prog_id', 'duration', 'pass_mark', 'annual_semesters', 'max_units_per_semester', 'grading_system_id'], 'default', 'value' => null],
-            [['prog_curriculum_id', 'prog_id', 'duration', 'pass_mark', 'annual_semesters', 'max_units_per_semester', 'grading_system_id'], 'integer'],
+            [['prog_id', 'prog_curriculum_desc', 'duration', 'pass_mark', 'start_date', 'prog_cur_prefix', 'grading_system_id'], 'required'],
+            [['prog_id', 'duration', 'pass_mark', 'annual_semesters', 'max_units_per_semester', 'grading_system_id'], 'default', 'value' => null],
+            [['prog_id', 'duration', 'pass_mark', 'annual_semesters', 'max_units_per_semester', 'grading_system_id'], 'integer'],
             [['start_date', 'end_date', 'date_created', 'approval_date'], 'safe'],
             [['prog_curriculum_desc'], 'string', 'max' => 300],
             [['average_type', 'prog_cur_prefix', 'status'], 'string', 'max' => 10],
             [['award_rounding'], 'string', 'max' => 20],
-            [['prog_curriculum_id'], 'unique'],
-//            [['grading_system_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalExGradingSystem::class, 'targetAttribute' => ['grading_system_id' => 'grading_system_id']],
             [['prog_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programme::class, 'targetAttribute' => ['prog_id' => 'prog_id']],
         ];
     }
@@ -65,19 +66,29 @@ class ProgrammeCurriculum extends ActiveRecord
             'prog_curriculum_id' => 'Prog Curriculum ID',
             'prog_id' => 'Prog ID',
             'prog_curriculum_desc' => 'Prog Curriculum Desc',
-            'duration' => 'ACADEMIC SESSIONS',
+            'duration' => 'Duration',
             'pass_mark' => 'Pass Mark',
             'annual_semesters' => 'Annual Semesters',
             'max_units_per_semester' => 'Max Units Per Semester',
             'average_type' => 'Average Type',
-            'award_rounding' => 'ROUNDOFF, TRUNCATE',
+            'award_rounding' => 'Award Rounding',
             'start_date' => 'Start Date',
             'end_date' => 'End Date',
-            'prog_cur_prefix' => 'Programme curriculum prefix',
+            'prog_cur_prefix' => 'Prog Cur Prefix',
             'date_created' => 'Date Created',
             'grading_system_id' => 'Grading System ID',
             'status' => 'Status',
             'approval_date' => 'Approval Date',
         ];
+    }
+
+    /**
+     * Gets query for [[programme]].
+     *
+     * @return ActiveQuery
+     */
+    public function getProgramme(): ActiveQuery
+    {
+        return $this->hasOne(Programme::class, ['prog_id' => 'prog_id']);
     }
 }

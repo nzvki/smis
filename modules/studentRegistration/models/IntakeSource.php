@@ -21,7 +21,7 @@ class IntakeSource extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.sm_intake_source';
+        return 'smis.sm_intake_source';
     }
 
     /**

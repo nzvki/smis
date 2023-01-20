@@ -5,9 +5,7 @@
 
 namespace app\modules\studentRegistration\models;
 
-use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
-use yii\db\Connection;
 
 /**
  * This is the model class for table "smisportal.org_programmes".
@@ -27,17 +25,8 @@ class Programme extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.org_programmes';
+        return 'smis.org_programmes';
     }
-
-    /**
-     * @return Connection the database connection used by this AR class.
-     * @throws InvalidConfigException
-     */
-//    public static function getDb(): Connection
-//    {
-//        return Yii::$app->get('sm_db');
-//    }
 
     /**
      * {@inheritdoc}

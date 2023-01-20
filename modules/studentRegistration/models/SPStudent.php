@@ -5,11 +5,13 @@
 
 namespace app\modules\studentRegistration\models;
 
-use yii\db\ActiveQuery;
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
+use yii\db\Connection;
 
 /**
- * This is the model class for table "smis.sm_student".
+ * This is the model class for table "smisportal.sm_student".
  *
  * @property int $student_id
  * @property string $student_number
@@ -31,18 +33,27 @@ use yii\db\ActiveRecord;
  * @property string|null $post_code
  * @property string|null $post_address
  * @property string|null $town
- * @property string|null $service
+ * @property string|null $service 
  * @property string|null $nationality
  * @property string|null $date_of_birth
  */
-class Student extends ActiveRecord
+class SPStudent extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
-        return 'smis.sm_student';
+        return 'smisportal.sm_student';
+    }
+
+    /**
+     * @return Connection the database connection used by this AR class.
+     * @throws InvalidConfigException
+     */
+    public static function getDb(): Connection
+    {
+        return Yii::$app->get('db2');
     }
 
     /**
@@ -51,11 +62,11 @@ class Student extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['student_number', 'surname', 'other_names', 'gender', 'country_code', 'dob'], 'required'],
+            [['student_id', 'student_number', 'surname', 'other_names', 'gender', 'country_code', 'dob'], 'required'],
+            [['student_id', 'sponsor'], 'default', 'value' => null],
+            [['student_id', 'sponsor'], 'integer'],
             [['dob', 'registration_date', 'date_of_birth'], 'safe'],
-            [['sponsor'], 'default', 'value' => null],
-            [['sponsor'], 'integer'],
-            [['student_number', 'passport_no', 'post_address', 'service'], 'string', 'max' => 20],
+            [['student_number', 'passport_no', 'post_address', 'service '], 'string', 'max' => 20],
             [['surname', 'primary_phone_no', 'alternative_phone_no', 'town', 'nationality'], 'string', 'max' => 50],
             [['other_names', 'primary_email', 'alternative_email'], 'string', 'max' => 100],
             [['gender'], 'string', 'max' => 1],
@@ -63,7 +74,8 @@ class Student extends ActiveRecord
             [['id_no', 'post_code'], 'string', 'max' => 10],
             [['service_number'], 'string', 'max' => 30],
             [['blood_group'], 'string', 'max' => 5],
-            [['country_code'], 'exist', 'skipOnError' => true, 'targetClass' => Country::class, 'targetAttribute' => ['country_code' => 'country_code']],
+            [['student_id'], 'unique'],
+//            [['country_code'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalOrgCountry::class, 'targetAttribute' => ['country_code' => 'country_code']],
         ];
     }
 
@@ -93,17 +105,9 @@ class Student extends ActiveRecord
             'post_code' => 'Post Code',
             'post_address' => 'Post Address',
             'town' => 'Town',
-            'service' => 'Service',
+            'service ' => 'Service',
             'nationality' => 'Nationality',
             'date_of_birth' => 'Date Of Birth',
         ];
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getCountry(): ActiveQuery
-    {
-        return $this->hasOne(Country::class, ['country_code' => 'country_code']);
     }
 }

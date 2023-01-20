@@ -21,7 +21,7 @@ class StudentCategory extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.sm_student_category';
+        return 'smis.sm_student_category';
     }
 
     /**

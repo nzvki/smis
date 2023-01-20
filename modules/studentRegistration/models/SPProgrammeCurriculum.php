@@ -2,10 +2,12 @@
 /**
  * @author Rufusy Idachi <idachirufus@gmail.com>
  */
-
 namespace app\modules\studentRegistration\models;
 
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
+use yii\db\Connection;
 
 /**
  * This is the model class for table "smisportal.org_programme_curriculum".
@@ -27,14 +29,23 @@ use yii\db\ActiveRecord;
  * @property string $status
  * @property string|null $approval_date
  */
-class ProgrammeCurriculum extends ActiveRecord
+class SPProgrammeCurriculum extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
-        return 'smis.org_programme_curriculum';
+        return 'smisportal.org_programme_curriculum';
+    }
+
+    /**
+     * @return Connection the database connection used by this AR class.
+     * @throws InvalidConfigException
+     */
+    public static function getDb(): Connection
+    {
+        return Yii::$app->get('db2');
     }
 
     /**
@@ -52,7 +63,7 @@ class ProgrammeCurriculum extends ActiveRecord
             [['award_rounding'], 'string', 'max' => 20],
             [['prog_curriculum_id'], 'unique'],
 //            [['grading_system_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalExGradingSystem::class, 'targetAttribute' => ['grading_system_id' => 'grading_system_id']],
-            [['prog_id'], 'exist', 'skipOnError' => true, 'targetClass' => Programme::class, 'targetAttribute' => ['prog_id' => 'prog_id']],
+//            [['prog_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalOrgProgrammes::class, 'targetAttribute' => ['prog_id' => 'prog_id']],
         ];
     }
 
@@ -65,15 +76,15 @@ class ProgrammeCurriculum extends ActiveRecord
             'prog_curriculum_id' => 'Prog Curriculum ID',
             'prog_id' => 'Prog ID',
             'prog_curriculum_desc' => 'Prog Curriculum Desc',
-            'duration' => 'ACADEMIC SESSIONS',
+            'duration' => 'Duration',
             'pass_mark' => 'Pass Mark',
             'annual_semesters' => 'Annual Semesters',
             'max_units_per_semester' => 'Max Units Per Semester',
             'average_type' => 'Average Type',
-            'award_rounding' => 'ROUNDOFF, TRUNCATE',
+            'award_rounding' => 'Award Rounding',
             'start_date' => 'Start Date',
             'end_date' => 'End Date',
-            'prog_cur_prefix' => 'Programme curriculum prefix',
+            'prog_cur_prefix' => 'Prog Cur Prefix',
             'date_created' => 'Date Created',
             'grading_system_id' => 'Grading System ID',
             'status' => 'Status',

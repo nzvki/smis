@@ -25,7 +25,7 @@ class Country extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.org_country';
+        return 'smis.org_country';
     }
 
     /**

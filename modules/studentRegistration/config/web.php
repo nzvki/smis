@@ -10,7 +10,8 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'components' => [
-        'db' => $db,
+        'db' => $db['smis'],
+        'db2' => $db['smisportal'],
         'errorHandler' => [
             'class' => 'yii\web\ErrorHandler',
             'errorAction' => 'student-registration/default/error',
@@ -23,8 +24,8 @@ $config = [
             'viewPath' => '@app/modules/studentRegistration/mail',
             'useFileTransport' => false,
             'transport' => [
-                'dsn' => 'smtp://d38acd23973124:4badb45ed6fd76@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login',
-//                'dsn' => 'gmail://smisadmin@uonbi.ac.ke:lziunystxuhwunjh@default'
+//                'dsn' => 'smtp://d38acd23973124:4badb45ed6fd76@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login',
+                'dsn' => 'gmail://smisadmin@uonbi.ac.ke:lziunystxuhwunjh@default'
             ]
         ],
         'log' => [

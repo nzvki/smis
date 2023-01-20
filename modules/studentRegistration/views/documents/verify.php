@@ -130,14 +130,14 @@ $this->title = $title;
                                         $docStatus = $submittedDocument['verify_status'];
                                         $docComments = $submittedDocument['doc_comments'];
 
-                                        $additionalClasses = 'show active';
-                                        if($index > 0){
-                                            $additionalClasses = '';
+                                        $activeClasses = '';
+                                        if($index === 0){
+                                            $activeClasses = 'show active';
                                         }
 
                                         $docDownloadUrl = SmisHelper::regDocDownloadUrl($submittedDocId, $admRefNo);
                                     ?>
-                                    <div class="tab-pane fade <?=$additionalClasses?>" id="v-pills-doc-<?=$docId?>" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                                    <div class="tab-pane fade <?=$activeClasses?>" id="v-pills-doc-<?=$docId?>" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
                                         <div class="loader"></div>
                                         <div class="error-display alert text-center" role="alert"></div>
                                         <div class="row">

@@ -69,7 +69,6 @@ class AppAsset extends AssetBundle
         'https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js',
         // AdminLTE App
         'https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js',
-//        'https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js',
 
         /**
          * Application js

@@ -23,7 +23,7 @@ class RegistrationDocument extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.sm_reg_documents';
+        return 'smis.sm_reg_documents';
     }
 
     /**

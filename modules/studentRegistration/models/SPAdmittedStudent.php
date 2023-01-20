@@ -5,15 +5,17 @@
 
 namespace app\modules\studentRegistration\models;
 
-use yii\db\ActiveQuery;
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
+use yii\db\Connection;
 
 /**
- * This is the model class for table "smis.sm_admitted_student".
+ * This is the model class for table "smisportal.sm_admitted_student".
  *
  * @property int $adm_refno
  * @property string|null $kcse_index_no
- * @property string|null $kcse_year when uploading make this field mandatory
+ * @property string|null $kcse_year
  * @property string|null $primary_phone_no
  * @property string|null $alternative_phone_no
  * @property string|null $primary_email
@@ -27,11 +29,11 @@ use yii\db\ActiveRecord;
  * @property string|null $birth_cert_no
  * @property int $source_id
  * @property string|null $passport_no
- * @property string $admission_status to take care of a case where an admission is revoked or recalled for the sake of module II default status pre-admission
+ * @property string|null $admission_status to take care of a case where an admission is revoked or recalled for the sake of module II
  * @property int|null $application_refno to link to applicant incase a report of admitted student is required
  * @property int $intake_code
  * @property int $student_category_id
- * @property string|null $password default refno
+ * @property string|null $password
  * @property bool|null $doc_submission_status
  * @property string|null $primary_email_salt
  * @property string|null $secondary_email_salt
@@ -39,25 +41,31 @@ use yii\db\ActiveRecord;
  * @property string|null $secondary_email_verified_date
  * @property string|null $surname
  * @property string|null $other_names
- * @property string|null $primary_phone_country_code
- * @property string|null $alternative_phone_country_code
- * @property string $gender
- * @property string|null $clearance_status indicates clearance status of a student. PENDING, CLEARED, NOT CLEARED
+ * @property string|null $clearance_status Indicates clearance status of a student. PENDING, CLEARED, NOT CLEARED
  * @property string|null $password_changed_date
  * @property string|null $service
+ * @property bool|null $sync_status
  * @property string|null $service_number
  * @property string|null $nationality
  * @property string|null $date_of_birth
- * @property bool|null $sync_status
  */
-class AdmittedStudent extends ActiveRecord
+class SPAdmittedStudent extends ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName(): string
     {
-        return 'smis.sm_admitted_student';
+        return 'smisportal.sm_admitted_student';
+    }
+
+    /**
+     * @return Connection the database connection used by this AR class.
+     * @throws InvalidConfigException
+     */
+    public static function getDb(): Connection
+    {
+        return Yii::$app->get('db2');
     }
 
     /**
@@ -66,21 +74,18 @@ class AdmittedStudent extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['uon_prog_code', 'source_id', 'intake_code', 'student_category_id', 'gender'], 'required'],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
+            [['adm_refno', 'uon_prog_code', 'source_id', 'intake_code', 'student_category_id'], 'required'],
+            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
+            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
             [['doc_submission_status', 'sync_status'], 'boolean'],
             [['primary_email_verified_date', 'secondary_email_verified_date', 'password_changed_date', 'date_of_birth'], 'safe'],
-            [['kcse_index_no', 'post_address', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'service'], 'string', 'max' => 20],
-            [['kcse_year', 'post_code', 'primary_phone_country_code', 'alternative_phone_country_code'], 'string', 'max' => 10],
-            [['primary_phone_no', 'alternative_phone_no', 'town', 'surname', 'nationality'], 'string', 'max' => 50],
-            [['primary_email', 'alternative_email', 'password'], 'string', 'max' => 100],
-            [['admission_status', 'clearance_status', 'service_number'], 'string', 'max' => 30],
-            [['primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
+            [['kcse_index_no', 'primary_phone_no', 'alternative_phone_no', 'post_code', 'post_address', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'service'], 'string', 'max' => 20],
+            [['kcse_year'], 'string', 'max' => 10],
+            [['primary_email', 'alternative_email', 'surname', 'nationality'], 'string', 'max' => 50],
+            [['town', 'admission_status', 'clearance_status', 'service_number'], 'string', 'max' => 30],
+            [['password', 'primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
             [['other_names'], 'string', 'max' => 150],
-            [['gender'], 'string', 'max' => 1],
-            [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => IntakeSource::class, 'targetAttribute' => ['source_id' => 'source_id']],
-            [['intake_code'], 'exist', 'skipOnError' => true, 'targetClass' => Intake::class, 'targetAttribute' => ['intake_code' => 'intake_code']],
+            [['adm_refno'], 'unique'],
         ];
     }
 
@@ -118,48 +123,13 @@ class AdmittedStudent extends ActiveRecord
             'secondary_email_verified_date' => 'Secondary Email Verified Date',
             'surname' => 'Surname',
             'other_names' => 'Other Names',
-            'primary_phone_country_code' => 'Primary Phone Country Code',
-            'alternative_phone_country_code' => 'Alternative Phone Country Code',
-            'gender' => 'Gender',
             'clearance_status' => 'Clearance Status',
             'password_changed_date' => 'Password Changed Date',
             'service' => 'Service',
+            'sync_status' => 'Sync Status',
             'service_number' => 'Service Number',
             'nationality' => 'Nationality',
             'date_of_birth' => 'Date Of Birth',
-            'sync_status' => 'Sync Status',
         ];
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getIntake(): ActiveQuery
-    {
-        return $this->hasOne(Intake::class, ['intake_code' => 'intake_code']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getIntakeSource(): ActiveQuery
-    {
-        return $this->hasOne(IntakeSource::class, ['source_id' => 'source_id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getCategory(): ActiveQuery
-    {
-        return $this->hasOne(StudentCategory::class, ['std_category_id' => 'student_category_id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getProgramme(): ActiveQuery
-    {
-        return $this->hasOne(Programme::class, ['prog_code' => 'uon_prog_code']);
     }
 }

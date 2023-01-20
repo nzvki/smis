@@ -22,7 +22,7 @@ class StudentStatus extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.sm_student_status';
+        return 'smis.sm_student_status';
     }
 
     /**

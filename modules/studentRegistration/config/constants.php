@@ -6,8 +6,16 @@
 //defined('YII_DEBUG') or define('YII_DEBUG', true);
 //defined('YII_ENV') or define('YII_ENV', 'dev');
 
-defined('DB_SERVER') or define('DB_SERVER', '41.89.92.189');
-defined('DB_PORT') or define('DB_PORT', '5432');
-defined('DB_NAME') or define('DB_NAME', 'devdb2');
-defined('DB_USER') or define('DB_USER', 'smisportal');
-defined('DB_PASS') or define('DB_PASS', 'Portaldev2022-');
+defined('SMIS_DB_SERVER') or define('SMIS_DB_SERVER', '41.89.92.189');
+defined('SMIS_DB_PORT') or define('SMIS_DB_PORT', '5432');
+defined('SMIS_DB_NAME') or define('SMIS_DB_NAME', 'devdb1');
+defined('SMIS_DB_USER') or define('SMIS_DB_USER', 'smisdev');
+defined('SMIS_DB_PASS') or define('SMIS_DB_PASS', 'Postndudev2022-');
+
+defined('SMIS_PORTAL_DB_SERVER') or define('SMIS_PORTAL_DB_SERVER', '41.89.92.189');
+defined('SMIS_PORTAL_DB_PORT') or define('SMIS_PORTAL_DB_PORT', '5432');
+defined('SMIS_PORTAL_DB_NAME') or define('SMIS_PORTAL_DB_NAME', 'devdb2');
+defined('SMIS_PORTAL_DB_USER') or define('SMIS_PORTAL_DB_USER', 'smisportal');
+defined('SMIS_PORTAL_DB_PASS') or define('SMIS_PORTAL_DB_PASS', 'Portaldev2022-');
+
+

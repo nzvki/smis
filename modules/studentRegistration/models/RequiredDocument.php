@@ -23,7 +23,7 @@ class RequiredDocument extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return 'smisportal.sm_reg_required_document';
+        return 'smis.sm_reg_required_document';
     }
 
     /**

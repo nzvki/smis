@@ -5,12 +5,11 @@
 
 namespace app\modules\studentRegistration\models;
 
-use JetBrains\PhpStorm\ArrayShape;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
- * This is the model class for table "smisportal.sm_student_programme_curriculum".
+ * This is the model class for table "sm_student_programme_curriculum".
  *
  * @property int $student_prog_curriculum_id
  * @property int $student_id
@@ -19,8 +18,14 @@ use yii\db\ActiveRecord;
  * @property int $student_category_id
  * @property int $adm_refno
  * @property int $status_id
+ *
+ * @property AdmittedStudent $admRefno
+ * @property ProgCurriculum $progCurriculum
+ * @property Student $student
+ * @property StudentCategory $studentCategory
+ * @property StudentStatus $status
  */
-class StudentProgramme extends ActiveRecord
+class StudentProgCurriculum extends ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -36,12 +41,11 @@ class StudentProgramme extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['student_prog_curriculum_id', 'student_id', 'registration_number', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'required'],
-            [['student_prog_curriculum_id', 'student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'default', 'value' => null],
-            [['student_prog_curriculum_id', 'student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'integer'],
+            [['student_id', 'registration_number', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'required'],
+            [['student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'default', 'value' => null],
+            [['student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'integer'],
             [['registration_number'], 'string', 'max' => 20],
-            [['student_prog_curriculum_id'], 'unique'],
-            [['prog_curriculum_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProgrammeCurriculum::class, 'targetAttribute' => ['prog_curriculum_id' => 'prog_curriculum_id']],
+            [['prog_curriculum_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProgCurriculum::class, 'targetAttribute' => ['prog_curriculum_id' => 'prog_curriculum_id']],
             [['adm_refno'], 'exist', 'skipOnError' => true, 'targetClass' => AdmittedStudent::class, 'targetAttribute' => ['adm_refno' => 'adm_refno']],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::class, 'targetAttribute' => ['student_id' => 'student_id']],
             [['student_category_id'], 'exist', 'skipOnError' => true, 'targetClass' => StudentCategory::class, 'targetAttribute' => ['student_category_id' => 'std_category_id']],
@@ -52,8 +56,6 @@ class StudentProgramme extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    #[ArrayShape(['student_prog_curriculum_id' => "string", 'student_id' => "string", 'registration_number' => "string",
-        'prog_curriculum_id' => "string", 'student_category_id' => "string", 'adm_refno' => "string", 'status_id' => "string"])]
     public function attributeLabels(): array
     {
         return [
@@ -68,6 +70,8 @@ class StudentProgramme extends ActiveRecord
     }
 
     /**
+     * Gets query for [[AdmittedStudent]].
+     *
      * @return ActiveQuery
      */
     public function getAdmittedStudent(): ActiveQuery
@@ -76,6 +80,28 @@ class StudentProgramme extends ActiveRecord
     }
 
     /**
+     * Gets query for [[ProgCurriculum]].
+     *
+     * @return ActiveQuery
+     */
+    public function getProgCurriculum(): ActiveQuery
+    {
+        return $this->hasOne(ProgCurriculum::class, ['prog_curriculum_id' => 'prog_curriculum_id']);
+    }
+
+    /**
+     * Gets query for [[Status]].
+     *
+     * @return ActiveQuery
+     */
+    public function getStatus(): ActiveQuery
+    {
+        return $this->hasOne(StudentStatus::class, ['status_id' => 'status_id']);
+    }
+
+    /**
+     * Gets query for [[Student]].
+     *
      * @return ActiveQuery
      */
     public function getStudent(): ActiveQuery
@@ -84,26 +110,12 @@ class StudentProgramme extends ActiveRecord
     }
 
     /**
+     * Gets query for [[StudentCategory]].
+     *
      * @return ActiveQuery
      */
-    public function getCategory(): ActiveQuery
+    public function getStudentCategory(): ActiveQuery
     {
         return $this->hasOne(StudentCategory::class, ['std_category_id' => 'student_category_id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getStatus(): ActiveQuery
-    {
-        return $this->hasOne(Student::class, ['status_id' => 'status_id']);
-    }
-
-    /**
-     * @return ActiveQuery
-     */
-    public function getProgramme(): ActiveQuery
-    {
-        return $this->hasOne(Student::class, ['prog_curriculum_id' => 'prog_curriculum_id']);
     }
 }
