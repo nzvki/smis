@@ -7,7 +7,7 @@ use yii\data\ActiveDataProvider;
 use app\models\OrgCohort;
 
 /**
- * OrgCohortSearch represents the model behind the search form of `app\models\OrgCohort`.
+ * OrgCohortSearchNew represents the model behind the search form of `app\models\OrgCohort`.
  */
 class OrgCohortSearch extends OrgCohort
 {
@@ -18,7 +18,7 @@ class OrgCohortSearch extends OrgCohort
     {
         return [
             [['cohort_id'], 'integer'],
-            [['cohort_desc'], 'safe'],
+            [['cohort_desc', 'cohort_year', 'adm_start_date', 'adm_end_date', 'cohort_status'], 'safe'],
         ];
     }
 
@@ -59,9 +59,13 @@ class OrgCohortSearch extends OrgCohort
         // grid filtering conditions
         $query->andFilterWhere([
             'cohort_id' => $this->cohort_id,
+            'adm_start_date' => $this->adm_start_date,
+            'adm_end_date' => $this->adm_end_date,
         ]);
 
-        $query->andFilterWhere(['ilike', 'cohort_desc', $this->cohort_desc]);
+        $query->andFilterWhere(['ilike', 'cohort_desc', $this->cohort_desc])
+            // ->andFilterWhere(['ilike', 'cohort_year ', $this->cohort_year ])
+            ->andFilterWhere(['ilike', 'cohort_status', $this->cohort_status]);
 
         return $dataProvider;
     }

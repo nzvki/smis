@@ -2,6 +2,7 @@
 
 namespace app\modules\studentRecords\controllers;
 
+use Yii;
 use app\models\SmNameChange;
 use app\models\search\SmNameChangeSearch;
 use yii\web\Controller;
@@ -39,9 +40,30 @@ class SmNameChangeController extends Controller
     public function actionIndex()
     {
         $searchModel = new SmNameChangeSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->search($this->request->queryParams, [
+            'filterCompleted' => true
+        ]);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+        /**
+     * Lists all SmNameChange models.
+     *
+     * @return string
+     */
+    public function actionReports()
+    {
+        $searchModel = new SmNameChangeSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams, [
+            'filterCompleted' => false
+        ]);
+
+        return $this->render('reports', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -114,6 +136,17 @@ class SmNameChangeController extends Controller
         $this->findModel($name_change_id)->delete();
 
         return $this->redirect(['index']);
+    }
+    public function actionDownload()
+    {
+        $file=Yii::$app->request->get('file');
+        $path=Yii::$app->request->get('document_url');
+        $root=Yii::getAlias('@app/').$path;
+        if (file_exists($root)) {
+            return Yii::$app->response->sendFile($root);
+        } else {
+            throw new \yii\web\NotFoundHttpException("{$file} is not found!");
+        }
     }
 
     /**

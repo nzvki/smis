@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use app\helpers\pdfHelper;
+use app\notifications\notify\NameChangeNotification;
+use app\notifications\recipient\NameChangeRecipient;
 
 /**
  * This is the model class for table "sm_name_change".
@@ -19,7 +22,7 @@ use Yii;
  * @property string $status PENDING, REVIEW, APPROVED, DISAPPROVED
  *
  * @property SmNameChangeApproval[] $smNameChangeApprovals
- * @property SmStudent $student
+ * @property Student $student
  */
 class SmNameChange extends \yii\db\ActiveRecord
 {
@@ -45,7 +48,7 @@ class SmNameChange extends \yii\db\ActiveRecord
             [['new_othernames', 'current_othernames'], 'string', 'max' => 50],
             [['reason', 'document_url'], 'string', 'max' => 200],
             [['name_change_id'], 'unique'],
-            [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmStudent::className(), 'targetAttribute' => ['student_id' => 'student_id']],
+            [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'student_id']],
         ];
     }
 
@@ -85,6 +88,16 @@ class SmNameChange extends \yii\db\ActiveRecord
      */
     public function getStudent()
     {
-        return $this->hasOne(SmStudent::className(), ['student_id' => 'student_id']);
+        return $this->hasOne(Student::className(), ['student_id' => 'student_id']);
+    }
+
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        // $notification = new NameChangeNotification($this);
+        // $recipient = new NameChangeRecipient('lkombo@uonbi.ac.ke');
+        // Yii::$app->notifier->send($recipient, $notification);
     }
 }

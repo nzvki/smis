@@ -33,8 +33,7 @@ class OrgKuccpsProgMap extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['prog_map_id', 'kuccps_prog_code', 'uon_prog_code'], 'required'],
-            [['prog_map_id'], 'default', 'value' => null],
+            [['kuccps_prog_code', 'uon_prog_code'], 'required'],
             [['prog_map_id'], 'integer'],
             [['kuccps_prog_code', 'uon_prog_code'], 'string', 'max' => 20],
             [['prog_map_id'], 'unique'],
@@ -61,9 +60,11 @@ class OrgKuccpsProgMap extends \yii\db\ActiveRecord
     {
         $completed = true;
         foreach($data as $row) {
-            $this->assign($row);
-            if(!$this->save()) {
-                dd($this->getErrors());
+            $map = new self();
+            $map->assign($row);
+            $map->batchFile = $this->batchFile;
+            if(!$map->save()) {
+                dd($map->getErrors());
                 break;
                 $completed = !$completed;
             }

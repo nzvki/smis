@@ -10,9 +10,17 @@ $this->title='';
 
         <header class="pb-1 mb-4 border-bottom fs-4 d-flex flex-col text-primary">
             <?= Html::a(
-                '<span><i class="bi bi-person-rolodex fs-4"></i>  Student Records </span>', ['/'],
-                ['class' => "d-flex align-items-center text-decoration-none text-primary mx-3 flex-grow"])
-            ?>
+    '<span><i class="bi bi-house fs-4"></i>  Home</span>',
+    ['/'],
+    ['class' => "d-flex align-items-center text-decoration-none text-primary mx-3 flex-grow"]
+)
+?>	>
+            <?= Html::a(
+    '<span><i class="bi bi-person-rolodex fs-4"></i>  Student Records </span>',
+    ['/student-records'],
+    ['class' => "d-flex align-items-center text-decoration-none text-primary mx-3 flex-grow"]
+)
+?>
             <div class="row justify-content-center align-items-center fs-6 flex-fill pt-2">
                 <div class="col d-flex flex-row ">
                     <i class="bi bi-search fs-6 pr-2"></i>
@@ -49,7 +57,7 @@ $utils = "
     'children' : [
         { 'text' : 'Student Search','a_attr' : {'href':'/student-records/utility/student-search'},'type':'links' },
         { 'text' : 'Upload Admitted List','a_attr' : {'href':'/student-records/utility/upload-admitted-list'},'type':'links' },
-        { 'text' : 'Request for Supplementary Exams','a_attr' : {'href':'javascript:void()'},'type':'links' },
+        { 'text' : 'NDU Upload Admitted List','a_attr' : {'href':'/student-records/utility/ndu-upload-admitted-list'},'type':'links' },
     ]}
 ]
 ";
@@ -59,27 +67,32 @@ $reports = "
     'children' : [
         { 'text' : 'Students per Sponsor','a_attr' : {'href':'/student-records/reports/students-per-sponsor'},'type':'links' },
         { 'text' : 'Students Nationality Stats','a_attr' : {'href':'/student-records/reports/student-nationality-stats'},'type':'links' },
+        { 'text' : 'Uploaded Admitted Students List','a_attr' : {'href':'/student-records/reports/admitted-list'},'type':'links' },
         { 'text' : 'Nominal Roll','a_attr' : {'href':'javascript:void()'},
             'children' : [
-                { 'text' : 'Student No. per Semester','a_attr' : {'href':'javascript:void()'},'type':'links' },
-                { 'text' : 'Roll per Class Module','a_attr' : {'href':'javascript:void()'},'type':'links' },
-                { 'text' : 'Statistics Summary','a_attr' : {'href':'javascript:void()'},'type':'links' },
-                { 'text' : 'Population Analysis','a_attr' : {'href':'javascript:void()'},'type':'links' },
-                { 'text' : 'Admissions Analysis','a_attr' : {'href':'javascript:void()'},'type':'links' },
+                { 'text' : 'Admissions Analysis','a_attr' : {'href':'/student-records/reports/nominal-admissions-analysis'},'type':'links' },
             ]},
+		{ 'text' : 'Student Requests','a_attr' : {'href':'javascript:void()'},
+            'children' : [
+                { 'text' : 'Name Change Request Approval','a_attr' : {'href':'/student-records/sm-name-change/reports'},'type':'links' },
+                { 'text' : 'Withdrawal Request Approval','a_attr' : {'href':'/student-records/sm-withdrawal-request/reports'},'type':'links' },
+            ]},
+        
     ]}
 ]
 ";
 $namechange = "
 [
-    {'text' : 'Student Name Change',
+    {'text' : 'Student Requests',
     'children' : [
-        { 'text' : 'Name change request approval','a_attr' : {'href':'/student-records/sm-name-change'},'type':'links' },
-        { 'text' : 'Name Change Request Approval Reports','a_attr' : {'href':'#'},'type':'links' },
+        { 'text' : 'Name Change Request Approval','a_attr' : {'href':'/student-records/sm-name-change'},'type':'links' },
+        { 'text' : 'Withdrawal/ Deferment Request Approval','a_attr' : {'href':'/student-records/sm-withdrawal-request'},'type':'links' },
        
     ]}
 ]
 ";
+
+
 $this->registerJs(
     <<<JS
 let clearBtn = $("#menu-clear");
@@ -104,12 +117,12 @@ JS
 
 $m =[$jsonMenu,$utils,$reports,$namechange];
 
-menu($this,$m);
+menu($this, $m);
 
-function menu($t,$m): void
+function menu($t, $m): void
 {
     $i=0;
-    foreach($m as $jsonMu){
+    foreach ($m as $jsonMu) {
         $t->registerJs(
             <<<JS
         $('div.menu-tree-container$i')
@@ -132,7 +145,7 @@ function menu($t,$m): void
     });
     
 JS,
-);
+        );
         $i++;
     }
 }

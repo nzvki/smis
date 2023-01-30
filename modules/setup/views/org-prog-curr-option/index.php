@@ -39,7 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'attribute' => 'programmeCurriculum',
                         'label' => 'Curriculum Description',
-                        'value' => 'programmeCurriculum.prog_curriculum_desc'
+                        'value' => function($model) {
+                            return ($model->programmeCurriculum)[0]->prog_curriculum_desc;
+                        }
                     ],
                     [
                         'attribute' => 'option_desc',

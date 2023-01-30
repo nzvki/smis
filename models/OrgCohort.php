@@ -5,13 +5,14 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "org_cohort".
+ * This is the model class for table "smis.org_cohort".
  *
  * @property int $cohort_id
  * @property string $cohort_desc
- *
- * @property OrgCohortSession[] $orgCohortSessions
- * @property SmStudentCohortHistory[] $smStudentCohortHistories
+ * @property string|null $cohort_year
+ * @property string|null $adm_start_date
+ * @property string|null $adm_end_date
+ * @property string|null $cohort_status
  */
 class OrgCohort extends \yii\db\ActiveRecord
 {
@@ -30,8 +31,10 @@ class OrgCohort extends \yii\db\ActiveRecord
     {
         return [
             [['cohort_desc'], 'required'],
-            [['cohort_desc'], 'unique'],
+            [['adm_start_date', 'adm_end_date'], 'safe'],
             [['cohort_desc'], 'string', 'max' => 50],
+            [['cohort_year'], 'string', 'max' => 9],
+            [['cohort_status'], 'string', 'max' => 30],
         ];
     }
 
@@ -42,7 +45,11 @@ class OrgCohort extends \yii\db\ActiveRecord
     {
         return [
             'cohort_id' => 'Cohort ID',
-            'cohort_desc' => 'Cohort Description',
+            'cohort_desc' => 'Cohort Desc',
+            'cohort_year' => 'Cohort Year',
+            'adm_start_date' => 'Adm Start Date',
+            'adm_end_date' => 'Adm End Date',
+            'cohort_status' => 'Cohort Status',
         ];
     }
 

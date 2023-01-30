@@ -32,7 +32,7 @@ class StudentProgrammeCurriculum extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'sm_student_programme_curriculum';
+        return 'smis.sm_student_programme_curriculum';
     }
 
     /**

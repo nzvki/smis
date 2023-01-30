@@ -51,7 +51,8 @@ $config = ['template' => "{input}\n{error}\n{hint}"];
             </div>
             <div class="col-md-4">
                 <?= $form->field($model, 'country_code')->widget(Select2::class, [
-                    'data' => ArrayHelper::map((array)OrgCountry::find()->all(), 'code', 'nationality'),
+                    'data' => ArrayHelper::map(OrgCountry::find()->orderBy('nationality')->asArray()->all(),
+                        'country_code', 'nationality'),
                     'options' => ['placeholder' => 'Select a Nationality'],
                     'pluginOptions' => [
                         'allowClear' => true

@@ -46,6 +46,8 @@ $jsonMenu = [
             {'text' : 'General','a_attr':{'href':'javascript:void()'},
             'children' : [
                 { 'text' : 'Country','a_attr' : {'href':'setup/org-country'},'type':'links' },
+                { 'text' : 'Approvers','a_attr' : {'href':'setup/sm-approver'},'type':'links' },
+                { 'text' : 'Withdrawal Type','a_attr' : {'href':'setup/sm-withdrawal-type'},'type':'links' },
             ]}
         ]
     ",

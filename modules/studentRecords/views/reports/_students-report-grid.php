@@ -2,9 +2,10 @@
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\generated\search\CountrySearch */
+/* @var $searchModel app\models\search\OrgCountrySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+use app\models\Student;
 use kartik\grid\GridView;
 use kartik\grid\SerialColumn;
 use yii\helpers\Html;
@@ -42,16 +43,15 @@ use yii\helpers\Html;
             'columns' => [
                 ['class' => SerialColumn::class],
 
-                'STUDENT_ID',
-                'STUDENT_NUMBER',
-                'SURNAME',
-                'OTHER_NAMES',
-                'GENDER',
-                ['attribute' => 'NATIONALITY','value'=>function($e){return $e->nationality->NATIONALITY;},],
-                'DOB',
-                'ID_NO',
-                'PASSPORT_NO',
-                ['attribute'=>'SPONSOR','value'=>function($e){return $e->sponsor->SPONSOR_NAME;},],
+                'student_id',
+                'service_number',
+                'surname',
+                'other_names',
+                'gender',
+                ['attribute' => 'country_code','value'=>function(Student $e){return $e->countryCode->nationality;},],
+                'id_no',
+                'passport_no',
+                ['attribute'=>'sponsor','value'=>function(Student $e){return $e->sponsorList->sponsor_name;},],
             ],
         ]) ?>
 

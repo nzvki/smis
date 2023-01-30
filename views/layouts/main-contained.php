@@ -7,6 +7,7 @@
 use app\assets\AppAsset;
 use app\widgets\Alert;
 use kartik\alert\AlertBlock;
+use kartik\growl\Growl;
 use yii\bootstrap5\BootstrapIconAsset;
 use yii\bootstrap5\BootstrapPluginAsset;
 use yii\bootstrap5\Breadcrumbs;
@@ -80,11 +81,27 @@ BootstrapIconAsset::register($this);
     </div>
     <div class="container-fluid">
         <div class="content-container bg-white border-radius px-1 py-2">
-            <?=
-            AlertBlock::widget([
-                'useSessionFlash' => true,
-                'type' => AlertBlock::TYPE_ALERT
-            ]);
+            <?php
+            foreach (Yii::$app->session->getAllFlashes(true) as $message):
+                if((!empty($message['message']))) {
+                    echo Growl::widget([
+                        'type' => (!empty($message['type'])) ? $message['type'] : Growl::TYPE_INFO,
+                        'title' => (!empty($message['title'])) ? Html::encode($message['title']) : 'Title Not Set!',
+                        'icon' => (!empty($message['icon'])) ? $message['icon'] : 'fa fa-info',
+                        'body' => (!empty($message['message'])) ? Html::decode($message['message']) : 'Message Not Set!',
+                        'showSeparator' => true,
+                        'delay' => 500, //This delay is how long before the message shows
+                        'pluginOptions' => [
+                            'delay' => (!empty($message['duration'])) ? $message['duration'] : 0, //This delay is how long the message shows for
+                            'showProgressbar' => true,
+                            'placement' => [
+                                'from' => (!empty($message['positionY'])) ? $message['positionY'] : 'top',
+                                'align' => (!empty($message['positionX'])) ? $message['positionX'] : 'right',
+                            ]
+                        ]
+                    ]);
+                }
+            endforeach;
             ?>
             <?= $content ?>
         </div>

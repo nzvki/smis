@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\SmNameChangeApproval */
 
-$this->title = 'Update Sm Name Change Approval: ' . $model->name_change_approval_id;
+$this->title = 'Update Name Change Approval: ' . $model->name_change_approval_id;
 $this->params['breadcrumbs'][] = ['label' => 'Sm Name Change Approvals', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name_change_approval_id, 'url' => ['view', 'name_change_approval_id' => $model->name_change_approval_id]];
 $this->params['breadcrumbs'][] = 'Update';

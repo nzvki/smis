@@ -101,7 +101,7 @@ class OrgKuccpsProgMapController extends Controller
                 return $this->redirect('index');
 
             }else{
-                dd($model->getErrors());
+                var_dump($model->getErrors());
                 $model->loadDefaultValues();
 
             }

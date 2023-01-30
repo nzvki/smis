@@ -11,6 +11,8 @@ use app\models\OrgProgCurrUnit;
  */
 class OrgProgCurrUnitSearch extends OrgProgCurrUnit
 {
+    public $progCurriculum;
+    public $orgUnitHistory;
     /**
      * {@inheritdoc}
      */
@@ -18,7 +20,7 @@ class OrgProgCurrUnitSearch extends OrgProgCurrUnit
     {
         return [
             [['prog_curriculum_unit_id', 'org_unit_history_id', 'prog_curriculum_id'], 'integer'],
-            [['start_date', 'end_date', 'status'], 'safe'],
+            [['start_date', 'end_date', 'status','orgUnitHistory','progCurriculum'], 'safe'],
         ];
     }
 
@@ -40,7 +42,22 @@ class OrgProgCurrUnitSearch extends OrgProgCurrUnit
      */
     public function search($params)
     {
-        $query = OrgProgCurrUnit::find();
+//        $query = OrgProgCurrUnit::find();
+        $query=OrgProgCurrUnit::find()->select([
+            'org_unit.unit_name',
+           'org_prog_curr_unit.prog_curriculum_unit_id' ,
+            'org_prog_curr_unit.prog_curriculum_id',
+            'org_prog_curr_unit.org_unit_history_id',
+            'org_prog_curr_unit.start_date',
+            'org_prog_curr_unit.end_date',
+            'org_prog_curr_unit.status',
+            'org_programme_curriculum.prog_curriculum_desc',
+
+             ])->joinWith(['orgUnitHistory'=>function($q){
+                  $q ->joinWith(['orgUnit']);
+                  }])
+                ->joinWith(['progCurriculum']);
+
 
         // add conditions that should always apply here
 
@@ -65,7 +82,9 @@ class OrgProgCurrUnitSearch extends OrgProgCurrUnit
             'end_date' => $this->end_date,
         ]);
 
-        $query->andFilterWhere(['ilike', 'status', $this->status]);
+        $query->andFilterWhere(['ilike', 'status', $this->status])
+        ->andFilterWhere(['ilike', 'org_programme_curriculum.prog_curriculum_desc', $this->progCurriculum])
+        ->andFilterWhere(['ilike', 'org_unit.unit_name', $this->orgUnitHistory]);
 
         return $dataProvider;
     }

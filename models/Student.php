@@ -118,6 +118,11 @@ class Student extends \yii\db\ActiveRecord
         return $this->hasMany(StudentProgrammeCurriculum::class, ['student_id' => 'student_id']);
     }
 
+    public function getFullNames()
+    {
+        return $this->surname.' '.$this->other_names;
+    }
+
     /**
      * Returns Photo as a Base64 string
      * @return string
@@ -125,7 +130,9 @@ class Student extends \yii\db\ActiveRecord
     public function avatar(): string
     {
         $id = str_replace('/', '', $this->student_number);
-        if (!empty($extra_path)) $extra_path = $extra_path . '/';
+        if (!empty($extra_path)) {
+            $extra_path = $extra_path . '/';
+        }
         $dir = Yii::getAlias('@photos') . '/students/';
         $img1 = glob($dir . $id . '.*');
         if (empty($img1)) {

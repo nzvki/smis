@@ -35,11 +35,13 @@ use Yii;
  * @property string|null $secondary_email_verified_date
  * @property string|null $surname
  * @property string|null $other_names
+ * @property string $gender
  *
  * @property Intakes $intakeCode
  * @property StudSubmittedDocument[] $studSubmittedDocuments
  * @property StudentProgrammeCurriculum[] $studentProgrammeCurriculums
  * @property IntakeSource $source
+ * @property OrgProgrammes $programmes
  */
 class AdmittedStudent extends \yii\db\ActiveRecord
 {
@@ -58,22 +60,26 @@ class AdmittedStudent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['uon_prog_code', 'source_id', 'intake_code', ], 'required'],
+            [['uon_prog_code', 'source_id', 'intake_code','kuccps_prog_code'], 'required'],
             [['kcse_index_no', 'kcse_year',], 'required'],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
-            [['doc_submission_status'], 'boolean'],
+//            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
+//            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
+//            [['doc_submission_status'], 'boolean'],
+            [['kcse_index_no','kcse_year'], 'unique','targetAttribute' => 'kcse_index_no'],
+//            [['kcse_index_no','kcse_year','primary_phone_no'], 'unique'],
+//            [['kcse_index_no','kcse_year','primary_email'], 'unique'],
             [['primary_email_verified_date', 'secondary_email_verified_date'], 'safe'],
-            [['kcse_index_no', 'kuccps_prog_code', 'uon_prog_code'], 'string', 'max' => 20],
-            [['kcse_year'], 'string', 'max' => 10],
-            [['primary_phone_no', 'alternative_phone_no', 'post_address', 'national_id', 'birth_cert_no', 'passport_no', 'admission_status'], 'string', 'max' => 12],
-            [['primary_email', 'alternative_email'], 'string', 'max' => 25],
+//            [['kcse_index_no', 'kuccps_prog_code', 'uon_prog_code'], 'string', 'max' => 20],
+//            [['kcse_year'], 'string', 'max' => 10],
+            [['gender'], 'string', 'max' => 1],
+//            [['primary_phone_no', 'alternative_phone_no', 'post_address', 'national_id', 'birth_cert_no', 'passport_no'], 'string', 'max' => 12],
+//            [['primary_email', 'alternative_email'], 'string', 'max' => 25],
             [['post_code'], 'string', 'max' => 5],
-            [['town'], 'string', 'max' => 15],
-            [['password'], 'string', 'max' => 100],
-            [['primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
-            [['surname'], 'string', 'max' => 50],
-            [['other_names'], 'string', 'max' => 150],
+            [['town'], 'string', 'max' => 100],
+//            [['password'], 'string', 'max' => 100],
+//            [['primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
+//            [['surname'], 'string', 'max' => 50],
+//            [['other_names'], 'string', 'max' => 150],
             [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => IntakeSource::class, 'targetAttribute' => ['source_id' => 'source_id']],
             [['intake_code'], 'exist', 'skipOnError' => true, 'targetClass' => Intakes::class, 'targetAttribute' => ['intake_code' => 'intake_code']],
             [['admit_list'], 'file'],
@@ -87,8 +93,8 @@ class AdmittedStudent extends \yii\db\ActiveRecord
     {
         return [
             'adm_refno' => 'Adm Refno',
-            'kcse_index_no' => 'Kcse Index No',
-            'kcse_year' => 'Kcse Year',
+            'kcse_index_no' => 'KCSE Index No',
+            'kcse_year' => 'Year',
             'primary_phone_no' => 'Primary Phone No',
             'alternative_phone_no' => 'Alternative Phone No',
             'primary_email' => 'Primary Email',
@@ -96,16 +102,17 @@ class AdmittedStudent extends \yii\db\ActiveRecord
             'post_code' => 'Post Code',
             'post_address' => 'Post Address',
             'town' => 'Town',
-            'kuccps_prog_code' => 'Kuccps Prog Code',
-            'uon_prog_code' => 'Uon Prog Code',
+            'gender'=>'Gender',
+            'kuccps_prog_code' => 'KUCCPS Code',
+            'uon_prog_code' => 'Programme',
             'national_id' => 'National ID',
             'birth_cert_no' => 'Birth Cert No',
-            'source_id' => 'Source ID',
+            'source_id' => 'Source',
             'passport_no' => 'Passport No',
             'admission_status' => 'Admission Status',
             'application_refno' => 'Application Refno',
             'intake_code' => 'Intake Code',
-            'student_category_id' => 'Student Category ID',
+            'student_category_id' => 'Student Category',
             'password' => 'Password',
             'doc_submission_status' => 'Doc Submission Status',
             'primary_email_salt' => 'Primary Email Salt',
@@ -155,5 +162,15 @@ class AdmittedStudent extends \yii\db\ActiveRecord
     public function getSource()
     {
         return $this->hasOne(IntakeSource::class, ['source_id' => 'source_id']);
+    }
+
+    /**
+     * Gets query for [[Source]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProgrammes()
+    {
+        return $this->hasOne(OrgProgrammes::class, ['uon_prog_code' => 'prog_code']);
     }
 }

@@ -69,8 +69,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             //'unit_head_user_id',
-           'start_date',
-            'end_date',
+            [
+                'attribute' => 'start_date',
+                'value' => function ($model) {
+                    return strtoupper(Yii::$app->formatter->asDate($model->start_date, 'php:d-M-yy'));
+                },
+            ],
+            // 'end_date',
+            [
+                'attribute' => 'end_date',
+                'value' => function ($model) {
+                    if(isset($model->end_date)):
+                        return strtoupper(Yii::$app->formatter->asDate($model->end_date, 'php:d-M-yy'));
+                    endif;
+                },
+            ],
             //'user_id',
             //'date_created',
 //            [

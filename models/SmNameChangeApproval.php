@@ -32,8 +32,8 @@ class SmNameChangeApproval extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name_change_approval_id', 'name_change_id', 'approval_status', 'approved_by', 'approval_date'], 'required'],
-            [['name_change_approval_id', 'name_change_id'], 'default', 'value' => null],
+            [['name_change_id', 'approval_status', 'approved_by', 'approval_date'], 'required'],
+            [['name_change_id'], 'default', 'value' => null],
             [['name_change_approval_id', 'name_change_id'], 'integer'],
             [['approval_date'], 'safe'],
             [['approval_status'], 'string', 'max' => 30],

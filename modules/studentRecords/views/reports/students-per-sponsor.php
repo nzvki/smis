@@ -2,19 +2,17 @@
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\generated\search\CountrySearch */
+/* @var $searchModel app\models\search\OrgCountrySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $id integer */
 
-use app\models\generated\Sponsor;
-use kartik\grid\GridView;
-use kartik\grid\SerialColumn;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
 
-$sponsors = ArrayHelper::map(Sponsor::find()->all(),"SPONSOR_ID",'SPONSOR_NAME');
+$sponsors = ArrayHelper::map(\app\models\SmStudentSponsor::find()->all(),"sponsor_id",'sponsor_name');
 
 $this->title = 'Students per Sponsor'. ' '. (($id !== 0)?' : ' .$sponsors[$id]:'');
 $this->params['breadcrumbs'][] = ['label' => 'Student Records', 'url' => ['/student-records']];

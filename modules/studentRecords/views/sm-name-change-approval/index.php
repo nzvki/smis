@@ -1,47 +1,52 @@
 <?php
 
+use app\models\SmNameChange;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\SmNameChangeApprovalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Sm Name Change Approvals';
+$this->title = 'Name Change Approval Process';
+$this->params['breadcrumbs'][] = ['label' => 'Student Records', 'url' => ['/student-records']];
+$this->params['breadcrumbs'][] = ['label' => 'Name Change Requests Report', 'url' => ['/student-records/sm-name-change/reports']];
+$name_change_id = Yii::$app->request->get('name_change_id');
+$student = SmNameChange::findOne($name_change_id)->getStudent()->one();
 $this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 <div class="sm-name-change-approval-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="card" >
+        <div class="card-body">
 
-    <p>
-        <?= Html::a('Create Sm Name Change Approval', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <h3 class="card-title mb-3"><?= Html::encode($this->title.' - '. $student->surname .' '. $student->other_names . ' - '. $student->student_number) ?></h3>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <?= GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'columns' => [
+                    ['class' => 'kartik\grid\SerialColumn'],
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                    // 'name_change_approval_id',
+                    // 'name_change_id',
+                    'approval_status',
+                    'remarks',
+                    // 'approved_by',
+                    [
+                        'attribute' => 'approval_date',
+                        // 'contentOptions' => [ 'style' => 'width: 15%;' ],
+                        'value' => function ($model) {
+                            return Yii::$app->formatter->asDate($model->approval_date, 'php:d-M-Y');
+                        },
+                    ],
+                ],
+            ]); ?>
 
-            'name_change_approval_id',
-            'name_change_id',
-            'approval_status',
-            'remarks',
-            'approved_by',
-            //'approval_date',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, SmNameChangeApproval $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'name_change_approval_id' => $model->name_change_approval_id]);
-                 }
-            ],
-        ],
-    ]); ?>
-
-
+        </div>
+    </div>
 </div>

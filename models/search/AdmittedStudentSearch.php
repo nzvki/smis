@@ -4,10 +4,10 @@ namespace app\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\generated\AdmittedStudent;
+use app\models\AdmittedStudent;
 
 /**
- * AdmittedStudentSearch represents the model behind the search form of `app\models\generated\AdmittedStudent`.
+ * AdmittedStudentSearch represents the model behind the search form of `app\models\AdmittedStudent`.
  */
 class AdmittedStudentSearch extends AdmittedStudent
 {
@@ -18,7 +18,7 @@ class AdmittedStudentSearch extends AdmittedStudent
     {
         return [
             [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
-            [['kcse_index_no', 'kcse_year', 'primary_phone_no', 'alternative_phone_no', 'primary_email', 'alternative_email', 'post_code', 'post_address', 'town', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'admission_status', 'password', 'primary_email_salt', 'secondary_email_salt', 'primary_email_verified_date', 'secondary_email_verified_date', 'surname', 'other_names'], 'safe'],
+            [['kcse_index_no', 'kcse_year', 'primary_phone_no', 'alternative_phone_no', 'primary_email', 'alternative_email', 'post_code', 'post_address', 'town', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'admission_status', 'password', 'primary_email_salt', 'secondary_email_salt', 'primary_email_verified_date', 'secondary_email_verified_date', 'surname', 'other_names', 'primary_phone_country_code', 'alternative_phone_country_code', 'gender', 'clearance_status', 'password_changed_date'], 'safe'],
             [['doc_submission_status'], 'boolean'],
         ];
     }
@@ -67,6 +67,7 @@ class AdmittedStudentSearch extends AdmittedStudent
             'doc_submission_status' => $this->doc_submission_status,
             'primary_email_verified_date' => $this->primary_email_verified_date,
             'secondary_email_verified_date' => $this->secondary_email_verified_date,
+            'password_changed_date' => $this->password_changed_date,
         ]);
 
         $query->andFilterWhere(['ilike', 'kcse_index_no', $this->kcse_index_no])
@@ -88,7 +89,11 @@ class AdmittedStudentSearch extends AdmittedStudent
             ->andFilterWhere(['ilike', 'primary_email_salt', $this->primary_email_salt])
             ->andFilterWhere(['ilike', 'secondary_email_salt', $this->secondary_email_salt])
             ->andFilterWhere(['ilike', 'surname', $this->surname])
-            ->andFilterWhere(['ilike', 'other_names', $this->other_names]);
+            ->andFilterWhere(['ilike', 'other_names', $this->other_names])
+            ->andFilterWhere(['ilike', 'primary_phone_country_code', $this->primary_phone_country_code])
+            ->andFilterWhere(['ilike', 'alternative_phone_country_code', $this->alternative_phone_country_code])
+            ->andFilterWhere(['ilike', 'gender', $this->gender])
+            ->andFilterWhere(['ilike', 'clearance_status', $this->clearance_status]);
 
         return $dataProvider;
     }

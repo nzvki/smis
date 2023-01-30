@@ -2,11 +2,12 @@
 
 namespace app\modules\setup\controllers;
 
+use Yii;
+use yii\web\Controller;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use app\models\OrgCoursePrerequisite;
 use app\models\search\OrgCoursePrerequisiteSearch;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * OrgCoursePrerequisiteController implements the CRUD actions for OrgCoursePrerequisite model.
@@ -71,21 +72,10 @@ class OrgCoursePrerequisiteController extends Controller
 
 
 
-        if ($this->request->isPost) {
-            $model->assign([
-                'prog_curriculum_course_id' => 21,
-                'course_id' => 1,
-                'status' => 'ACTIVE'
-            ]);
-    
-            if($model->save()) {
-                dd('ok');
-            }else {
-                dd($model->getErrors());
-            }
-            
+        if ($this->request->isPost) {            
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'course_prerequisite_id' => $model->course_prerequisite_id]);
+                Yii::$app->getSession()->setFlash('success', " Course Prerequisite Created!");
+                return $this->redirect('index');
             }
         } else {
             $model->loadDefaultValues();
@@ -108,7 +98,8 @@ class OrgCoursePrerequisiteController extends Controller
         $model = $this->findModel($course_prerequisite_id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'course_prerequisite_id' => $model->course_prerequisite_id]);
+            Yii::$app->getSession()->setFlash('success', " Course Prerequisite Updated!");
+            return $this->redirect('index');
         }
 
         return $this->render('update', [

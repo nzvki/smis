@@ -2,7 +2,7 @@
 
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\generated\search\CountrySearch */
+/* @var $searchModel app\models\search\OrgCountrySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 use kartik\grid\GridView;

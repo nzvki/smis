@@ -21,15 +21,22 @@ use app\models\OrgStudyCentreGroup;
     <div class="row mb-2">
         <div class="col-md-12">
             <?php
-                $prog = OrgProgCurrSemester::find()->select('prog_curriculum_semester_id')->all();
-                $data = ArrayHelper::map($prog, 'prog_curriculum_semester_id', 'prog_curriculum_semester_id');
+                $progCurr = OrgProgCurrSemester::find()
+                ->select([
+                    'prog_curriculum_semester_id',
+                    'concat(acad_session_semester_desc,\' - \',prog_curriculum_desc) AS desc'
+                ])
+                ->joinWith(['acadSessionSemester','progCurriculum'])
+                ->where('true')->asArray()->all();
+                $data = ArrayHelper::map($progCurr, 'prog_curriculum_semester_id', 'desc');
+
                 echo $form
                     ->field($model, 'prog_curriculum_semester_id')
                     ->label('Program Curriculum Semester', ['class'=>'mb-2 fw-bold'])
                     ->widget(Select2::classname(), [
                         'data' => $data,
                         'language' => 'en',
-                        'options' => ['placeholder' => 'Select Cohort ...'],
+                        'options' => ['placeholder' => 'Select Program Curriculum Semester...'],
                         'pluginOptions' => [
                             'allowClear' => true
                         ],
@@ -37,19 +44,24 @@ use app\models\OrgStudyCentreGroup;
             ?>
         </div>
     </div>
-
     <div class="row mb-2">
         <div class="col-md-12">
             <?php
-                $study = OrgStudyCentreGroup::find()->select('study_centre_group_id')->all();
-                $data = ArrayHelper::map($study, 'study_centre_group_id', 'study_centre_group_id');
+                $study = OrgStudyCentreGroup::find()
+                    ->select([
+                        'study_centre_group_id',
+                        'concat(study_centre_name,\' - \',study_group_name) AS desc'
+                    ])
+                    ->joinWith(['studyCentre','studyGroup'])
+                    ->where('true')->asArray()->all();
+                $data = ArrayHelper::map($study, 'study_centre_group_id', 'desc');
                 echo $form
                     ->field($model, 'study_centre_group_id')
                     ->label('Study Center Group', ['class'=>'mb-2 fw-bold'])
                     ->widget(Select2::classname(), [
                         'data' => $data,
                         'language' => 'en',
-                        'options' => ['placeholder' => 'Select Cohort ...'],
+                        'options' => ['placeholder' => 'Select Study Center Group ...'],
                         'pluginOptions' => [
                             'allowClear' => true
                         ],

@@ -3,13 +3,12 @@
 namespace app\modules\studentRecords\controllers;
 
 use app\components\Photo;
-use app\models\generated\StudentProgrammeCurriculumSearch;
 use app\models\search\SmStudentProgrammeCurriculumSearch;
 use app\models\Student;
 use app\models\search\StudentSearch;
 use JetBrains\PhpStorm\ArrayShape;
-use Stidges\CountryFlags\CountryFlag;
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -74,7 +73,7 @@ class StudentController extends Controller
      * @param string $student_id Student ID
      * @return Response
      */
-    public function actionView($student_id)
+    public function actionView(string $student_id): Response
     {
         return $this->redirect(['details', 'student_id' => $student_id]);
 //        return $this->render('view', [
@@ -87,7 +86,7 @@ class StudentController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|Response
      */
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
         $model = new Student();
 
@@ -110,7 +109,7 @@ class StudentController extends Controller
      * @return string[]
      */
     #[ArrayShape(['output' => "string", 'message' => "string"])]
-    public function actionPhotoUpload($id)
+    public function actionPhotoUpload($id): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $fileName = str_replace('/', '', $id);
@@ -159,7 +158,7 @@ class StudentController extends Controller
      * @return Student the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($student_id)
+    protected function findModel(string $student_id): Student
     {
         if (($model = Student::findOne(['student_id' => $student_id])) !== null) {
             return $model;
@@ -174,7 +173,7 @@ class StudentController extends Controller
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDetails($student_id)
+    public function actionDetails(string $student_id): string
     {
         $model = $this->findModel($student_id);
 
@@ -185,7 +184,14 @@ class StudentController extends Controller
 //        return $this->render('details', ['STUDENT_ID' => $STUDENT_ID]);
     }
 
-    public function actionPersonalInfo($id,$view=false)
+    /**
+     * @param $id
+     * @param bool $view
+     * @return array|string|string[]
+     * @throws NotFoundHttpException
+     * @throws InvalidConfigException
+     */
+    public function actionPersonalInfo($id, bool $view=false): array|string
     {
         if (isset($_POST['hasEditable'])) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -217,23 +223,30 @@ class StudentController extends Controller
         ));
     }
 
-    public function actionNextOfKin($id)
+    /**
+     * @param $id
+     * @return string
+     */
+    public function actionNextOfKin($id): string
     {
 //        return Json::encode($this->renderAjax('details/next_of_kin'));
         return Json::encode($this->renderAjax('details/_nok'));
     }
 
-    public function actionFeesStatement($id)
+    /**
+     * @param $id
+     * @return string
+     */
+    public function actionFeesStatement($id): string
     {
         return Json::encode($this->renderAjax('details/_fee'));
     }
 
-    public function actionContactInfo($id)
-    {
-        return Json::encode($this->renderAjax('details/_contact'));
-    }
-
-    public function actionProgramme($id)
+    /**
+     * @param $id
+     * @return string
+     */
+    public function actionProgramme($id): string
     {
         $searchModel = new SmStudentProgrammeCurriculumSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);

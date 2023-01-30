@@ -43,6 +43,24 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'cohort_desc',
                         'label' => 'Cohort Description'
                     ],
+                    'cohort_year', 
+                    [
+                        'attribute' => 'adm_start_date',
+                        'value' => function ($model) {
+                            if($model->adm_start_date) {
+                                return strtoupper(Yii::$app->formatter->asDate($model->adm_start_date, 'php:d-M-yy')); 
+                            }
+                        },
+                    ],
+                    [
+                        'attribute' => 'adm_end_date',
+                        'value' => function ($model) {
+                            if($model->adm_end_date) {
+                                return strtoupper(Yii::$app->formatter->asDate($model->adm_end_date, 'php:d-M-yy'));
+                            }
+                        },
+                    ],
+                    //'cohort_status',
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{update} ',
