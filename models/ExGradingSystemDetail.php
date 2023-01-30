@@ -24,7 +24,7 @@ class ExGradingSystemDetail extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'ex_grading_system_detail';
+        return 'smis.ex_grading_system_detail';
     }
 
     /**

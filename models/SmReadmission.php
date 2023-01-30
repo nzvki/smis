@@ -26,7 +26,7 @@ class SmReadmission extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_readmission';
+        return 'smis.sm_readmission';
     }
 
     /**

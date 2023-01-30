@@ -18,7 +18,7 @@ class SmMentorRelationship extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_mentor_relationship';
+        return 'smis.sm_mentor_relationship';
     }
 
     /**

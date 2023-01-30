@@ -19,7 +19,7 @@ class SmIdRequestStatus extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_id_request_status';
+        return 'smis.sm_id_request_status';
     }
 
     /**

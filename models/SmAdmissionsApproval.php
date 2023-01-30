@@ -20,7 +20,7 @@ class SmAdmissionsApproval extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_admissions_approval';
+        return 'smis.sm_admissions_approval';
     }
 
     /**

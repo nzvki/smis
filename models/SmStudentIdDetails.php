@@ -22,7 +22,7 @@ class SmStudentIdDetails extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_student_id_details';
+        return 'smis.sm_student_id_details';
     }
 
     /**

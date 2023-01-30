@@ -21,7 +21,7 @@ class SmStudentSemesterGroup extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_student_semester_group';
+        return 'smis.sm_student_semester_group';
     }
 
     /**

@@ -17,7 +17,7 @@ class StudentSponsor extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'student_sponsor';
+        return 'smis.student_sponsor';
     }
 
     /**
