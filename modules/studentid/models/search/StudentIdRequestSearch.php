@@ -91,35 +91,35 @@ class StudentIdRequestSearch extends StudentIdRequest
 
         $query = <<<SQL
 SELECT
-	sm_student_id_request.request_id,
-	sm_student_id_request.request_type_id,
-	sm_id_request_type.id_type_desc AS id_request_type,
-	sm_student_id_request.student_prog_curr_id,
-	sm_student_id_request.request_date,
-	sm_student_id_request.status_id,
-	sm_student_id_request."source" AS request_reason,
-	sm_student_programme_curriculum.registration_number AS reg_no,
-	sm_student_programme_curriculum.prog_curriculum_id,
-	sm_student_programme_curriculum.student_category_id,
-	sm_student_category.std_category_name,
-	org_programmes.prog_code,
-	org_programmes.prog_full_name,
-	org_programmes.prog_type_id,
-	org_programmes.prog_cat_id,
-	org_prog_type.prog_type_code,
-	org_prog_type.prog_type_name,
-	concat ( sm_student.surname, ' ', sm_student.other_names ) AS full_name,
-	sm_id_request_status.status_name as id_request_status
+	smis.sm_student_id_request.request_id,
+	smis.sm_student_id_request.request_type_id,
+	smis.sm_id_request_type.id_type_desc AS id_request_type,
+	smis.sm_student_id_request.student_prog_curr_id,
+	smis.sm_student_id_request.request_date,
+	smis.sm_student_id_request.status_id,
+	smis.sm_student_id_request."source" AS request_reason,
+	smis.sm_student_programme_curriculum.registration_number AS reg_no,
+	smis.sm_student_programme_curriculum.prog_curriculum_id,
+	smis.sm_student_programme_curriculum.student_category_id,
+	smis.sm_student_category.std_category_name,
+	smis.org_programmes.prog_code,
+	smis.org_programmes.prog_full_name,
+	smis.org_programmes.prog_type_id,
+	smis.org_programmes.prog_cat_id,
+	smis.org_prog_type.prog_type_code,
+	smis.org_prog_type.prog_type_name,
+	concat ( smis.sm_student.surname, ' ', smis.sm_student.other_names ) AS full_name,
+	smis.sm_id_request_status.status_name as id_request_status
 FROM
-	sm_student_id_request
-	INNER JOIN sm_student_programme_curriculum ON sm_student_id_request.student_prog_curr_id = sm_student_programme_curriculum.student_prog_curriculum_id
-	INNER JOIN org_programme_curriculum ON sm_student_programme_curriculum.prog_curriculum_id = org_programme_curriculum.prog_curriculum_id
-	INNER JOIN org_programmes ON org_programme_curriculum.prog_id = org_programmes.prog_id
-	INNER JOIN sm_student_category ON sm_student_programme_curriculum.student_category_id = sm_student_category.std_category_id
-	INNER JOIN org_prog_type ON org_programmes.prog_type_id = org_prog_type.prog_type_id
-	INNER JOIN sm_student ON sm_student_programme_curriculum.student_id = sm_student.student_id
-	INNER JOIN sm_id_request_type ON sm_student_id_request.request_type_id = sm_id_request_type.request_type_id
-	INNER JOIN sm_id_request_status ON sm_student_id_request.status_id = sm_id_request_status.status_id
+	smis.sm_student_id_request
+	INNER JOIN smis.sm_student_programme_curriculum ON smis.sm_student_id_request.student_prog_curr_id = smis.sm_student_programme_curriculum.student_prog_curriculum_id
+	INNER JOIN smis.org_programme_curriculum ON smis.sm_student_programme_curriculum.prog_curriculum_id = smis.org_programme_curriculum.prog_curriculum_id
+	INNER JOIN smis.org_programmes ON smis.org_programme_curriculum.prog_id = smis.org_programmes.prog_id
+	INNER JOIN smis.sm_student_category ON smis.sm_student_programme_curriculum.student_category_id = smis.sm_student_category.std_category_id
+	INNER JOIN smis.org_prog_type ON smis.org_programmes.prog_type_id = smis.org_prog_type.prog_type_id
+	INNER JOIN smis.sm_student ON smis.sm_student_programme_curriculum.student_id = smis.sm_student.student_id
+	INNER JOIN smis.sm_id_request_type ON smis.sm_student_id_request.request_type_id = smis.sm_id_request_type.request_type_id
+	INNER JOIN smis.sm_id_request_status ON smis.sm_student_id_request.status_id = smis.sm_id_request_status.status_id
 SQL;
 
         $requestStatusIds = IdRequestStatus::getStatusId($idRequestStatus);
@@ -129,21 +129,21 @@ SQL;
 
         if (count($requestStatusIds) > 0) {
             $ids = implode(',', $requestStatusIds);
-            $filters[] = "sm_student_id_request.status_id IN ($ids)";
+            $filters[] = "smis.sm_student_id_request.status_id IN ($ids)";
         }
 
-        $filters[] = "sm_student_programme_curriculum.registration_number LIKE '%$this->reg_no%'";
+        $filters[] = "smis.sm_student_programme_curriculum.registration_number LIKE '%$this->reg_no%'";
 
         if ($this->reg_no) {
-            $filters[] = "sm_student_programme_curriculum.registration_number LIKE '%$this->reg_no%'";
+            $filters[] = "smis.sm_student_programme_curriculum.registration_number LIKE '%$this->reg_no%'";
         }
 
         if ($this->student_category_id) {
-            $filters[] = "sm_student_programme_curriculum.student_category_id = $this->student_category_id";
+            $filters[] = "smis.sm_student_programme_curriculum.student_category_id = $this->student_category_id";
         }
 
         if ($this->prog_curriculum_id) {
-            $filters[] = "sm_student_programme_curriculum.prog_curriculum_id = $this->prog_curriculum_id";
+            $filters[] = "smis.sm_student_programme_curriculum.prog_curriculum_id = $this->prog_curriculum_id";
         }
 
         if (count($filters) == 1) {
