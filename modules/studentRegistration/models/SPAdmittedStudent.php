@@ -44,10 +44,13 @@ use yii\db\Connection;
  * @property string|null $clearance_status Indicates clearance status of a student. PENDING, CLEARED, NOT CLEARED
  * @property string|null $password_changed_date
  * @property string|null $service
- * @property bool|null $sync_status
+ * @property bool|null $document_sync_status
  * @property string|null $service_number
  * @property string|null $nationality
  * @property string|null $date_of_birth
+ * @property bool|null $profile_sync_status
+ * @property int|null $sponsor
+ * @property string|null $blood_group
  */
 class SPAdmittedStudent extends ActiveRecord
 {
@@ -75,9 +78,9 @@ class SPAdmittedStudent extends ActiveRecord
     {
         return [
             [['adm_refno', 'uon_prog_code', 'source_id', 'intake_code', 'student_category_id'], 'required'],
-            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
-            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
-            [['doc_submission_status', 'sync_status'], 'boolean'],
+            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id', 'sponsor'], 'default', 'value' => null],
+            [['adm_refno', 'source_id', 'application_refno', 'intake_code', 'student_category_id', 'sponsor'], 'integer'],
+            [['doc_submission_status', 'document_sync_status', 'profile_sync_status '], 'boolean'],
             [['primary_email_verified_date', 'secondary_email_verified_date', 'password_changed_date', 'date_of_birth'], 'safe'],
             [['kcse_index_no', 'primary_phone_no', 'alternative_phone_no', 'post_code', 'post_address', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'service'], 'string', 'max' => 20],
             [['kcse_year'], 'string', 'max' => 10],
@@ -85,6 +88,7 @@ class SPAdmittedStudent extends ActiveRecord
             [['town', 'admission_status', 'clearance_status', 'service_number'], 'string', 'max' => 30],
             [['password', 'primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
             [['other_names'], 'string', 'max' => 150],
+            [['blood_group'], 'string', 'max' => 5],
             [['adm_refno'], 'unique'],
         ];
     }
@@ -126,10 +130,13 @@ class SPAdmittedStudent extends ActiveRecord
             'clearance_status' => 'Clearance Status',
             'password_changed_date' => 'Password Changed Date',
             'service' => 'Service',
-            'sync_status' => 'Sync Status',
+            'document_sync_status' => 'Document Sync Status',
             'service_number' => 'Service Number',
             'nationality' => 'Nationality',
             'date_of_birth' => 'Date Of Birth',
+            'profile_sync_status ' => 'Profile Sync Status',
+            'sponsor' => 'Sponsor',
+            'blood_group' => 'Blood Group',
         ];
     }
 }

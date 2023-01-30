@@ -17,7 +17,6 @@ use yii\db\ActiveRecord;
  * @property string $other_names
  * @property string $gender
  * @property string $country_code
- * @property string $dob
  * @property string|null $id_no
  * @property string|null $passport_no
  * @property string|null $service_number
@@ -51,8 +50,8 @@ class Student extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['student_number', 'surname', 'other_names', 'gender', 'country_code', 'dob'], 'required'],
-            [['dob', 'registration_date', 'date_of_birth'], 'safe'],
+            [['student_number', 'surname', 'other_names', 'gender', 'country_code'], 'required'],
+            [['registration_date', 'date_of_birth'], 'safe'],
             [['sponsor'], 'default', 'value' => null],
             [['sponsor'], 'integer'],
             [['student_number', 'passport_no', 'post_address', 'service'], 'string', 'max' => 20],
@@ -79,7 +78,6 @@ class Student extends ActiveRecord
             'other_names' => 'Other Names',
             'gender' => 'Gender',
             'country_code' => 'Country Code',
-            'dob' => 'Dob',
             'id_no' => 'Id No',
             'passport_no' => 'Passport No',
             'service_number' => 'Service Number',

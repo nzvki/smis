@@ -76,7 +76,7 @@ class DocumentsController extends BaseController
     {
         $transaction = Yii::$app->db->beginTransaction();
         try {
-            $admittedStudentsToSync = SPAdmittedStudent::find()->select(['adm_refno'])->where(['sync_status' => false])
+            $admittedStudentsToSync = SPAdmittedStudent::find()->select(['adm_refno'])->where(['document_sync_status' => false])
                 ->asArray()->all();
 
             if(count($admittedStudentsToSync) > 0){
@@ -84,7 +84,7 @@ class DocumentsController extends BaseController
                     $admRefNo = $admittedStudentToSync['adm_refno'];
 
                     $spAdmittedStudent = SPAdmittedStudent::findOne($admRefNo);
-                    $spAdmittedStudent->sync_status = true;
+                    $spAdmittedStudent->document_sync_status = true;
                     if(!$spAdmittedStudent->save()){
                         $errorMessage = 'Admitted student data failed to sync.';
                         if(!$spAdmittedStudent->validate()){
@@ -95,7 +95,7 @@ class DocumentsController extends BaseController
 
                     $admittedStudent = AdmittedStudent::findOne($admRefNo);
                     $admittedStudent->doc_submission_status = $spAdmittedStudent->doc_submission_status;
-                    $admittedStudent->sync_status = $spAdmittedStudent->sync_status;
+                    $admittedStudent->document_sync_status = $spAdmittedStudent->document_sync_status;
                     if(!$admittedStudent->save()){
                         $errorMessage = 'Admitted student data failed to sync.';
                         if(!$admittedStudent->validate()){
@@ -455,13 +455,12 @@ class DocumentsController extends BaseController
         $student->other_names = $admittedStudent->other_names;
         $student->gender = $admittedStudent->gender;
         $student->country_code = 'KEN';
-        $student->dob = $admittedStudent->date_of_birth;
         $student->id_no = $admittedStudent->national_id;
         $student->passport_no = $admittedStudent->passport_no;
         $student->service_number = $admittedStudent->service_number;
         $student->service = $admittedStudent->service;
-//        $student->blood_group = $admittedStudent->b
-//        $student->sponsor = $admittedStudent->spo
+        $student->blood_group = $admittedStudent->blood_group;
+        $student->sponsor = $admittedStudent->sponsor;
         $student->registration_date = SmisHelper::formatDate('now', 'Y-m-d');
         $student->primary_phone_no = $admittedStudent->primary_phone_no;
         $student->alternative_phone_no = $admittedStudent->alternative_phone_no;

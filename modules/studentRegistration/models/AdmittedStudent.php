@@ -48,7 +48,10 @@ use yii\db\ActiveRecord;
  * @property string|null $service_number
  * @property string|null $nationality
  * @property string|null $date_of_birth
- * @property bool|null $sync_status
+ * @property bool|null $document_sync_status
+ * @property bool|null $profile_sync_status
+ * @property int|null $sponsor
+ * @property string|null $blood_group
  */
 class AdmittedStudent extends ActiveRecord
 {
@@ -67,9 +70,9 @@ class AdmittedStudent extends ActiveRecord
     {
         return [
             [['uon_prog_code', 'source_id', 'intake_code', 'student_category_id', 'gender'], 'required'],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'default', 'value' => null],
-            [['source_id', 'application_refno', 'intake_code', 'student_category_id'], 'integer'],
-            [['doc_submission_status', 'sync_status'], 'boolean'],
+            [['source_id', 'application_refno', 'intake_code', 'student_category_id', 'sponsor'], 'default', 'value' => null],
+            [['source_id', 'application_refno', 'intake_code', 'student_category_id', 'sponsor'], 'integer'],
+            [['doc_submission_status', 'document_sync_status', 'profile_sync_status'], 'boolean'],
             [['primary_email_verified_date', 'secondary_email_verified_date', 'password_changed_date', 'date_of_birth'], 'safe'],
             [['kcse_index_no', 'post_address', 'kuccps_prog_code', 'uon_prog_code', 'national_id', 'birth_cert_no', 'passport_no', 'service'], 'string', 'max' => 20],
             [['kcse_year', 'post_code', 'primary_phone_country_code', 'alternative_phone_country_code'], 'string', 'max' => 10],
@@ -79,6 +82,7 @@ class AdmittedStudent extends ActiveRecord
             [['primary_email_salt', 'secondary_email_salt'], 'string', 'max' => 255],
             [['other_names'], 'string', 'max' => 150],
             [['gender'], 'string', 'max' => 1],
+            [['blood_group'], 'string', 'max' => 5],
             [['source_id'], 'exist', 'skipOnError' => true, 'targetClass' => IntakeSource::class, 'targetAttribute' => ['source_id' => 'source_id']],
             [['intake_code'], 'exist', 'skipOnError' => true, 'targetClass' => Intake::class, 'targetAttribute' => ['intake_code' => 'intake_code']],
         ];
@@ -127,7 +131,10 @@ class AdmittedStudent extends ActiveRecord
             'service_number' => 'Service Number',
             'nationality' => 'Nationality',
             'date_of_birth' => 'Date Of Birth',
-            'sync_status' => 'Sync Status',
+            'document_sync_status' => 'Document Sync Status',
+            'profile_sync_status' => 'Profile Sync Status',
+            'sponsor' => 'Sponsor',
+            'blood_group' => 'Blood Group',
         ];
     }
 
