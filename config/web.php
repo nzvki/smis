@@ -55,6 +55,7 @@ $config = [
             'rules' => [
                 'login' => 'site/login',
                 'logout' => 'site/logout',
+                '<module>/<controller>/<action:(update|delete|view|report-lost-id|print-single)>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
     ],
@@ -71,6 +72,10 @@ $config = [
         ],
         'student-registration' => [
             'class' => 'app\modules\studentRegistration\Module',
+        ],
+        'studentid' => [
+            'class' => 'app\modules\studentid\Module',
+            'defaultRoute' => 'manage-student-id'
         ],
         // Other TP Modules
         'gridview' => [
