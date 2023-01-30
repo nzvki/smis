@@ -24,7 +24,7 @@ class CrProgrammeCurrLectureTimetable extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'cr_programme_curr_lecture_timetable';
+        return 'smis.cr_programme_curr_lecture_timetable';
     }
 
     /**

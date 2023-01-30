@@ -21,7 +21,7 @@ class SmRegDocuments extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_reg_documents';
+        return 'smis.sm_reg_documents';
     }
 
     /**

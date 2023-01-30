@@ -49,7 +49,7 @@ class SmAdmittedStudent extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_admitted_student';
+        return 'smis.sm_admitted_student';
     }
 
     /**

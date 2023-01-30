@@ -19,7 +19,7 @@ class CrCourseRegStatus extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'cr_course_reg_status';
+        return 'smis.cr_course_reg_status';
     }
 
     /**

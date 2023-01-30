@@ -26,7 +26,7 @@ class CrProgCurrTimetable extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'cr_prog_curr_timetable';
+        return 'smis.cr_prog_curr_timetable';
     }
 
     /**

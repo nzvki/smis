@@ -20,7 +20,7 @@ class SmRegRequiredDocument extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_reg_required_document';
+        return 'smis.sm_reg_required_document';
     }
 
     /**

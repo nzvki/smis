@@ -19,7 +19,7 @@ class SmIntakeSource extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_intake_source';
+        return 'smis.sm_intake_source';
     }
 
     /**

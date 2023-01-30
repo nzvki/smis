@@ -22,7 +22,7 @@ class ExMarksheet extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'ex_marksheet';
+        return 'smis.ex_marksheet';
     }
 
     /**

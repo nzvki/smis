@@ -18,7 +18,7 @@ class SmStudentProgCurrStatus extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_student_prog_curr_status';
+        return 'smis.sm_student_prog_curr_status';
     }
 
     /**

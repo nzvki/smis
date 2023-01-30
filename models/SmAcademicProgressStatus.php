@@ -19,7 +19,7 @@ class SmAcademicProgressStatus extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_academic_progress_status';
+        return 'smis.sm_academic_progress_status';
     }
 
     /**

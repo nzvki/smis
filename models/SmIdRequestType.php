@@ -19,7 +19,7 @@ class SmIdRequestType extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_id_request_type';
+        return 'smis.sm_id_request_type';
     }
 
     /**

@@ -28,7 +28,7 @@ class CrCourseRegistration extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'cr_course_registration';
+        return 'smis.cr_course_registration';
     }
 
     /**

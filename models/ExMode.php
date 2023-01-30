@@ -19,7 +19,7 @@ class ExMode extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'ex_mode';
+        return 'smis.ex_mode';
     }
 
     /**

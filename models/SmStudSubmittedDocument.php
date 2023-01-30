@@ -26,7 +26,7 @@ class SmStudSubmittedDocument extends \app\extended\BaseModel
      */
     public static function tableName()
     {
-        return 'sm_stud_submitted_document';
+        return 'smis.sm_stud_submitted_document';
     }
 
     /**
