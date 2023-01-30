@@ -1,5 +1,7 @@
 <?php
 
+use kartik\datecontrol\DateControl;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'student_id_serial_no')->textInput(['placeholder' => 'Student Id Serial No']) ?>
 
-    <?= $form->field($model, 'student_prog_curr_id')->widget(\kartik\widgets\Select2::classname(), [
+    <?= $form->field($model, 'student_prog_curr_id')->widget(Select2::class, [
         'data' => \yii\helpers\ArrayHelper::map(\app\models\SmStudentProgrammeCurriculum::find()->orderBy('student_prog_curriculum_id')->asArray()->all(), 'student_prog_curriculum_id', 'student_prog_curriculum_id'),
         'options' => ['placeholder' => 'Choose Sm student programme curriculum'],
         'pluginOptions' => [
@@ -25,8 +27,8 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'issuance_date')->widget(\kartik\datecontrol\DateControl::classname(), [
-        'type' => \kartik\datecontrol\DateControl::FORMAT_DATE,
+    <?= $form->field($model, 'issuance_date')->widget(DateControl::class, [
+        'type' => DateControl::FORMAT_DATE,
         'saveFormat' => 'php:Y-m-d',
         'ajaxConversion' => true,
         'options' => [
@@ -37,8 +39,8 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'valid_from')->widget(\kartik\datecontrol\DateControl::classname(), [
-        'type' => \kartik\datecontrol\DateControl::FORMAT_DATE,
+    <?= $form->field($model, 'valid_from')->widget(DateControl::classname(), [
+        'type' => DateControl::FORMAT_DATE,
         'saveFormat' => 'php:Y-m-d',
         'ajaxConversion' => true,
         'options' => [
@@ -49,8 +51,8 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'valid_to')->widget(\kartik\datecontrol\DateControl::classname(), [
-        'type' => \kartik\datecontrol\DateControl::FORMAT_DATE,
+    <?= $form->field($model, 'valid_to')->widget(DateControl::classname(), [
+        'type' => DateControl::FORMAT_DATE,
         'saveFormat' => 'php:Y-m-d',
         'ajaxConversion' => true,
         'options' => [

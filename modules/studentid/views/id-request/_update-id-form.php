@@ -1,12 +1,13 @@
 <?php
 
-use kartik\widgets\ActiveForm;
-use kartik\widgets\Select2;
+
+use kartik\form\ActiveForm;
+use kartik\select2\Select2;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\studentid\models\StudentId */
-/* @var $form kartik\widgets\ActiveForm */
+/* @var $form kartik\form\ActiveForm */
 ?>
 
 <div class="student-id-form">
