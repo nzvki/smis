@@ -45,7 +45,7 @@ class StudentIdSearch extends StudentId
     {
         $this->load($params);
 
-        $count = self::getDb()->createCommand('SELECT COUNT(*) FROM sm_student_id')->queryScalar();
+        $count = self::getDb()->createCommand('SELECT COUNT(*) FROM smis.sm_student_id')->queryScalar();
 
         $query = <<<STUDENT_ID
 SELECT
