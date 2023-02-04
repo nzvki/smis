@@ -30,6 +30,13 @@ use yii\helpers\Url;
                         <p>Uploaded documents</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="<?= Url::to(['/student-registration/students']);?>" class="nav-link">
+                        <i class="nav-icon fa-solid fa-user-graduate" aria-hidden="true"></i>
+                        <p>Registered students</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

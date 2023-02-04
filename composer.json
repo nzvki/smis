@@ -41,7 +41,10 @@
         "yiisoft/yii2-jui": "2.0",
         "symfony/google-mailer": "6.1",
         "picqer/php-barcode-generator": "^2.2",
-        "masgeek/yii2-print-html": "^4.0"
+        "masgeek/yii2-print-html": "^4.0",
+        "kartik-v/yii2-date-range": "dev-master",
+        "kartik-v/yii2-mpdf": "dev-master",
+        "kartik-v/yii2-export": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

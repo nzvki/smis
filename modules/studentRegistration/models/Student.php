@@ -104,4 +104,12 @@ class Student extends ActiveRecord
     {
         return $this->hasOne(Country::class, ['country_code' => 'country_code']);
     }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCohortHistory(): ActiveQuery
+    {
+        return $this->hasOne(StudentCohortHistory::class, ['stud_id' => 'student_id']);
+    }
 }

@@ -13,6 +13,7 @@ use app\modules\studentRegistration\models\IntakeSource;
 use app\modules\studentRegistration\models\Programme;
 use app\modules\studentRegistration\models\ProgrammeCurriculum;
 use app\modules\studentRegistration\models\search\DocumentsSearch;
+use app\modules\studentRegistration\models\search\RegisteredStudentsSearch;
 use app\modules\studentRegistration\models\SPAdmittedStudent;
 use app\modules\studentRegistration\models\SPStudent;
 use app\modules\studentRegistration\models\SPStudentCohortHistory;
@@ -633,11 +634,5 @@ class DocumentsController extends BaseController
         $layout = '@app/modules/studentRegistration/mail/layouts/html';
         $view = '@app/modules/studentRegistration/mail/views/reUploadDocuments';
         SmisHelper::sendEmails([$emails], $layout, $view);
-    }
-
-    public function actionTest()
-    {
-        $student = SPAdmittedStudent::findOne('7233');
-        dd($student);
     }
 }

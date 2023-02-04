@@ -280,20 +280,25 @@ body {
 
 /* Date range picker widget styling */
 .daterangepicker .ranges .active {
-    background-color: #03d47c !important;
+    background-color: #304186 !important;
 }
 
 .daterangepicker .drp-buttons .drp-selected {
-    color: #03d47c !important;
+    color: #304186 !important;
+}
+
+.daterangepicker .drp-buttons .applyBtn {
+    background-color: #304186 !important;
+    border-color: #304186 !important;
 }
 
 .daterangepicker td.active, .daterangepicker td.active:hover {
-    background-color: #03d47c !important;
+    background-color: #304186 !important;
 }
 
 .daterangepicker .btn-primary.disabled, .daterangepicker .btn-primary:disabled {
-    background-color: #03d47c !important;
-    border-color: #03d47c;
+    background-color: #304186 !important;
+    border-color: #304186;
 }
 
 /* Forms styling */
