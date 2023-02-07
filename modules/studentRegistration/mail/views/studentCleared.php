@@ -1,6 +1,13 @@
 <?php
 /**
+ * @author Rufusy Idachi <idachirufus@gmail.com>
+ * @date: 2/7/2023
+ * @time: 11:52 AM
+ */
+
+/**
  * @var string $recipient
+ *  @var string $regNumber
  */
 ?>
 
@@ -21,9 +28,18 @@
                         </p>
 
                         <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">
-                            Your documents for registration have been reviewed internally and a number of anomalies identified. Your registration is therefore incomplete,
-                            and you cannot move to the next steps of studentships. You are required to resubmit some documents.
-                            Kindly login to your registration portal and make the indicated amendments ASAP and submit your documents again.
+                            Your registration into the University of Nairobi is now complete, and you have been assigned a student registration number.
+                            Your registration number is <?= $regNumber?>.
+                            The student registration number is an important identification in all your university undertakings.
+                            From now on, you will use your registration number to log in to your student portal.
+                        </p>
+
+                        <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">
+                            Log into the student portal and report to the current session and register for courses.
+                        </p>
+
+                        <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">
+                            I take this opportunity to warmly welcome you to the university of Nairobi
                         </p>
 
                         <p style="font-size: 16px; line-height: 1.625; color: #51545E; margin: .4em 0 1.1875em;">
@@ -39,4 +55,3 @@
         </table>
     </td>
 </tr>
-

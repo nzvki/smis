@@ -16,9 +16,9 @@ use yii\db\ActiveRecord;
  * @property int $acad_session_semester_id
  * @property int|null $semester_type_id teaching, supplementary
  *
-// * @property AcademicSessionSemester $acadSessionSemester
+ * @property AcademicSessionSemester $acadSessionSemester
  * @property ProgCurriculum $progCurriculum
-// * @property SemesterType $semesterType
+ * @property SemesterType $semesterType
  */
 class ProgCurrSemester extends ActiveRecord
 {
@@ -39,9 +39,9 @@ class ProgCurrSemester extends ActiveRecord
             [['prog_curriculum_id', 'acad_session_semester_id'], 'required'],
             [['prog_curriculum_id', 'acad_session_semester_id', 'semester_type_id'], 'default', 'value' => null],
             [['prog_curriculum_id', 'acad_session_semester_id', 'semester_type_id'], 'integer'],
-//            [['acad_session_semester_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrgAcademicSessionSemester::class, 'targetAttribute' => ['acad_session_semester_id' => 'acad_session_semester_id']],
+            [['acad_session_semester_id'], 'exist', 'skipOnError' => true, 'targetClass' => AcademicSessionSemester::class, 'targetAttribute' => ['acad_session_semester_id' => 'acad_session_semester_id']],
             [['prog_curriculum_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProgCurriculum::class, 'targetAttribute' => ['prog_curriculum_id' => 'prog_curriculum_id']],
-//            [['semester_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => OrgSemesterType::class, 'targetAttribute' => ['semester_type_id' => 'sem_type_id']],
+            [['semester_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => SemesterType::class, 'targetAttribute' => ['semester_type_id' => 'sem_type_id']],
         ];
     }
 
@@ -59,14 +59,12 @@ class ProgCurrSemester extends ActiveRecord
     }
 
     /**
-     * Gets query for [[AcadSessionSemester]].
-     *
      * @return ActiveQuery
      */
-//    public function getAcadSessionSemester()
-//    {
-//        return $this->hasOne(OrgAcademicSessionSemester::class, ['acad_session_semester_id' => 'acad_session_semester_id']);
-//    }
+    public function getAcademicSessionSemester(): ActiveQuery
+    {
+        return $this->hasOne(AcademicSessionSemester::class, ['acad_session_semester_id' => 'acad_session_semester_id']);
+    }
 
     /**
      * Gets query for [[ProgCurriculum]].
@@ -83,8 +81,8 @@ class ProgCurrSemester extends ActiveRecord
      *
      * @return ActiveQuery
      */
-//    public function getSemesterType()
-//    {
-//        return $this->hasOne(OrgSemesterType::class, ['sem_type_id' => 'semester_type_id']);
-//    }
+    public function getSemesterType(): ActiveQuery
+    {
+        return $this->hasOne(SemesterType::class, ['sem_type_id' => 'semester_type_id']);
+    }
 }

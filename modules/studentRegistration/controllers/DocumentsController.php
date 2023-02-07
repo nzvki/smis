@@ -6,28 +6,37 @@
 namespace app\modules\studentRegistration\controllers;
 
 use app\modules\studentRegistration\helpers\SmisHelper;
+use app\modules\studentRegistration\models\AcademicLevel;
+use app\modules\studentRegistration\models\AcademicProgress;
+use app\modules\studentRegistration\models\AcademicProgressStatus;
+use app\modules\studentRegistration\models\AcademicSessionSemester;
 use app\modules\studentRegistration\models\AdmittedStudent;
 use app\modules\studentRegistration\models\Cohort;
 use app\modules\studentRegistration\models\Intake;
 use app\modules\studentRegistration\models\IntakeSource;
+use app\modules\studentRegistration\models\ProgCurrSemesterGroup;
 use app\modules\studentRegistration\models\Programme;
 use app\modules\studentRegistration\models\ProgrammeCurriculum;
 use app\modules\studentRegistration\models\search\DocumentsSearch;
-use app\modules\studentRegistration\models\search\RegisteredStudentsSearch;
+use app\modules\studentRegistration\models\SPAcademicProgress;
 use app\modules\studentRegistration\models\SPAdmittedStudent;
 use app\modules\studentRegistration\models\SPStudent;
 use app\modules\studentRegistration\models\SPStudentCohortHistory;
 use app\modules\studentRegistration\models\SPStudentProgCurriculum;
+use app\modules\studentRegistration\models\SPStudentSemesterSessionProgress;
 use app\modules\studentRegistration\models\SPSubmittedDocument;
 use app\modules\studentRegistration\models\Student;
 use app\modules\studentRegistration\models\StudentCategory;
 use app\modules\studentRegistration\models\StudentCohortHistory;
 use app\modules\studentRegistration\models\StudentProgCurriculum;
+use app\modules\studentRegistration\models\StudentSemesterSessionProgress;
+use app\modules\studentRegistration\models\StudentSemesterSessionStatus;
 use app\modules\studentRegistration\models\StudentStatus;
 use app\modules\studentRegistration\models\SubmittedDocument;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
 use Yii;
+use yii\db\ActiveQuery;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
@@ -83,7 +92,6 @@ class DocumentsController extends BaseController
             if(count($admittedStudentsToSync) > 0){
                 foreach ($admittedStudentsToSync as $admittedStudentToSync){
                     $admRefNo = $admittedStudentToSync['adm_refno'];
-
                     $spAdmittedStudent = SPAdmittedStudent::findOne($admRefNo);
                     $spAdmittedStudent->document_sync_status = true;
                     if(!$spAdmittedStudent->save()){
@@ -389,6 +397,12 @@ class DocumentsController extends BaseController
 
             $this->createStudentProgCurriculum($student, $admittedStudent);
 
+            $progressDetails = $this->createStudentAcademicProgress($student->student_number);
+
+            $this->createStudentSemesterSessionProgress($progressDetails);
+
+            $this->sendEmailStudentCleared($student->surname, $student->primary_email, $student->student_number);
+
             $transaction->commit();
             $spTransaction->commit();
             $this->setFlash('success', 'Verify documents', 'Student was registered successfully.');
@@ -404,21 +418,57 @@ class DocumentsController extends BaseController
         }
     }
 
-//    #[NoReturn]
-//    public function actionTest()
-//    {
-//        $admittedStudent = AdmittedStudent::findOne('7108');
-//
-//        $cohort = $this->getOpenCohort();
-//
-//        $regNumber = $admittedStudent->uon_prog_code . '/' . $admittedStudent->adm_refno . '/' . $cohort['year'];
-//
-//        $student = $this->createStudent($admittedStudent, $regNumber);
-//
-//        $this->createStudentCohortHistory($student, $cohort['id']);
-//
-//        $this->createStudentProgCurriculum($student, $admittedStudent);
-//    }
+    /**
+     * Check status of all submitted documents that are mandatory
+     * @param string $admRefNo
+     * @return bool True if all are APPROVED. False if any is NOT_APPROVED.
+     */
+    private function studentCanBeAdmitted(string $admRefNo): bool
+    {
+        $submittedDocuments = SubmittedDocument::find()->alias('sd')
+            ->where(['sd.adm_refno' => $admRefNo])
+            ->joinWith('requiredDocument rd')
+            ->joinWith('requiredDocument.document doc')
+            ->andWhere(['doc.required' => true])
+            ->count();
+
+        $approvedDocuments = SubmittedDocument::find()->alias('sd')
+            ->where(['sd.adm_refno' => $admRefNo, 'sd.verify_status' => 'APPROVED'])
+            ->joinWith('requiredDocument rd')
+            ->joinWith('requiredDocument.document doc')
+            ->andWhere(['doc.required' => true])
+            ->count();
+
+        if($submittedDocuments === 0){
+            return false;
+        }
+
+        if((int)$submittedDocuments === (int)$approvedDocuments){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @param string $recipientName
+     * @param string $recipientEmail
+     * @return void
+     * @throws Exception
+     */
+    private function sendEmailDocsReUpload(string $recipientName, string $recipientEmail): void
+    {
+        $emails = [
+            'recipientEmail' => $recipientEmail,
+            'subject' => 'REGISTRATION DOCUMENTS UPLOAD',
+            'params' => [
+                'recipient' => $recipientName,
+            ]
+        ];
+        $layout = '@app/modules/studentRegistration/mail/layouts/html';
+        $view = '@app/modules/studentRegistration/mail/views/reUploadDocuments';
+        SmisHelper::sendEmails([$emails], $layout, $view);
+    }
 
     /**
      * @return array
@@ -585,54 +635,156 @@ class DocumentsController extends BaseController
     }
 
     /**
-     * Check status of all submitted documents that are mandatory
-     * @param string $admRefNo
-     * @return bool True if all are APPROVED. False if any is NOT_APPROVED.
+     * @throws Exception
      */
-    private function studentCanBeAdmitted(string $admRefNo): bool
+    private function getIdForAvailableSession(string $regNumber)
     {
-        $submittedDocuments = SubmittedDocument::find()->alias('sd')
-            ->where(['sd.adm_refno' => $admRefNo])
-            ->joinWith('requiredDocument rd')
-            ->joinWith('requiredDocument.document doc')
-            ->andWhere(['doc.required' => true])
-            ->count();
+        $studentProgCurr = StudentProgCurriculum::find()->select(['prog_curriculum_id'])
+            ->where(['registration_number' => $regNumber])->asArray()->one();
 
-        $approvedDocuments = SubmittedDocument::find()->alias('sd')
-            ->where(['sd.adm_refno' => $admRefNo, 'sd.verify_status' => 'APPROVED'])
-            ->joinWith('requiredDocument rd')
-            ->joinWith('requiredDocument.document doc')
-            ->andWhere(['doc.required' => true])
-            ->count();
+        $currentDate = SmisHelper::formatDate('now', 'Y-m-d');
 
-        if($submittedDocuments === 0){
-            return false;
+        $programmeCurriculumSemGroup = ProgCurrSemesterGroup::find()->alias('pcsg')
+            ->select([
+                'pcsg.prog_curriculum_sem_group_id',
+                'pcsg.prog_curriculum_semester_id'
+            ])
+            ->where(['<=', 'pcsg.start_date', $currentDate])
+            ->andWhere(['>=', 'pcsg.end_date', $currentDate])
+            ->joinWith(['progCurrSemester pcs' => function(ActiveQuery $q){
+                $q->select([
+                    'pcs.prog_curriculum_semester_id',
+                    'pcs.prog_curriculum_id',
+                    'pcs.acad_session_semester_id'
+                ]);
+            }], true, 'INNER JOIN')
+            ->andWhere(['pcs.prog_curriculum_id' => $studentProgCurr['prog_curriculum_id']])
+            ->joinWith(['progCurrSemester.academicSessionSemester assem' => function(ActiveQuery $q){
+                $q->select([
+                    'assem.acad_session_semester_id',
+                    'assem.acad_session_id'
+                ]);
+            }], true, 'INNER JOIN')
+            ->asArray()
+            ->one();
+
+        return $programmeCurriculumSemGroup['progCurrSemester']['academicSessionSemester']['acad_session_id'];
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[ArrayShape(['academicProgressId' => "mixed", 'academicSessionId' => "mixed"])]
+    private function createStudentAcademicProgress(string $regNumber): array
+    {
+        // New students come in at level 1
+        $academicLevel = AcademicLevel::find()->select(['academic_level_id'])->where(['academic_level' => 1])
+            ->asArray()->one();
+
+        $academicProgressStatus = AcademicProgressStatus::find()->select(['progress_status_id'])
+            ->where(['progress_status_name' => parent::ACADEMIC_PROGRESS_STATUS_REGISTERED])->asArray()->one();
+
+        $studentProgCurr = StudentProgCurriculum::find()->select(['student_prog_curriculum_id'])
+            ->where(['registration_number' => $regNumber])->asArray()->one();
+
+        $status = StudentStatus::find()->select(['status_id'])
+            ->where(['status' => parent::ACADEMIC_PROGRESS_ACTIVE])->asArray()->one();
+
+        $academicProgress = new AcademicProgress();
+        $academicProgress->acad_session_id = $this->getIdForAvailableSession($regNumber);
+        $academicProgress->academic_level_id = $academicLevel['academic_level_id'];
+        $academicProgress->student_prog_curriculum_id = $studentProgCurr['student_prog_curriculum_id'];
+        $academicProgress->progress_status_id = $academicProgressStatus['progress_status_id'];
+        $academicProgress->current_status = $status['status_id'];
+
+        if(!$academicProgress->save()){
+            if(!$academicProgress->validate()){
+                $errorMessage = SmisHelper::getModelErrors($academicProgress->getErrors());
+                throw new Exception($errorMessage);
+            }else{
+                throw new Exception('Student academic progress was not saved.');
+            }
         }
 
-        if((int)$submittedDocuments === (int)$approvedDocuments){
-            return true;
-        }else{
-            return false;
+        // Sync the registered student academic progress data with the student portal db
+        $spAcademicProgress = new SPAcademicProgress();
+        $spAcademicProgress->setAttributes($academicProgress->attributes);
+        if(!$spAcademicProgress->save()){
+            if(!$spAcademicProgress->validate()){
+                $errorMessage = SmisHelper::getModelErrors($spAcademicProgress->getErrors());
+                throw new Exception($errorMessage);
+            }else{
+                throw new Exception('Student academic progress failed to sync.');
+            }
+        }
+
+        return [
+            'academicProgressId' => $academicProgress['academic_progress_id'],
+            'academicSessionId' => $academicProgress['acad_session_id']
+        ];
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function createStudentSemesterSessionProgress(array $progressDetails)
+    {
+        $academicSessionId = $progressDetails['academicSessionId'];
+        $academicSessionSemester = AcademicSessionSemester::find()->select(['acad_session_semester_id'])
+            ->where(['acad_session_id' => $academicSessionId])->asArray()->one();
+
+        $studentSemesterSessionStatus = StudentSemesterSessionStatus::find()->select(['status_id'])
+            ->where(['status_name' => parent::STUDENT_SEMESTER_SESSION_STATUS_REPORTED])->asArray()->one();
+
+        $studentSemSessionProgress = new StudentSemesterSessionProgress();
+        $studentSemSessionProgress->acad_session_semester_id = $academicSessionSemester['acad_session_semester_id'];
+        $studentSemSessionProgress->academic_progress_id = $progressDetails['academicProgressId'];
+        $studentSemSessionProgress->sem_progress_number = 1; // New students come in at progress level 1
+        $studentSemSessionProgress->rep_status_id = $studentSemesterSessionStatus['status_id'];
+        $studentSemSessionProgress->prom_status_id = $studentSemesterSessionStatus['status_id'];
+
+        if(!$studentSemSessionProgress->save()){
+            if(!$studentSemSessionProgress->validate()){
+                $errorMessage = SmisHelper::getModelErrors($studentSemSessionProgress->getErrors());
+                throw new Exception($errorMessage);
+            }else{
+                throw new Exception('Student semester session progress was not saved.');
+            }
+        }
+
+        // Sync the registered student semester session progress data with the student portal db
+        $spStudentSemSessionProgress = new SPStudentSemesterSessionProgress();
+        $spStudentSemSessionProgress->setAttributes($studentSemSessionProgress->attributes);
+        $spStudentSemSessionProgress->promotion_status = 'REGISTERED';
+        if(!$spStudentSemSessionProgress->save()){
+            if(!$spStudentSemSessionProgress->validate()){
+                $errorMessage = SmisHelper::getModelErrors($spStudentSemSessionProgress->getErrors());
+                throw new Exception($errorMessage);
+            }else{
+                throw new Exception('Student semester session progress failed to sync.');
+            }
         }
     }
 
     /**
      * @param string $recipientName
      * @param string $recipientEmail
+     * @param $regNumber
      * @return void
      * @throws Exception
      */
-    private function sendEmailDocsReUpload(string $recipientName, string $recipientEmail): void
+    private function sendEmailStudentCleared(string $recipientName, string $recipientEmail, $regNumber): void
     {
         $emails = [
             'recipientEmail' => $recipientEmail,
-            'subject' => 'REGISTRATION DOCUMENTS UPLOAD',
+            'subject' => 'REGISTRATION DOCUMENTS APPROVAL',
             'params' => [
                 'recipient' => $recipientName,
+                'regNumber' => $regNumber
             ]
         ];
         $layout = '@app/modules/studentRegistration/mail/layouts/html';
-        $view = '@app/modules/studentRegistration/mail/views/reUploadDocuments';
+        $view = '@app/modules/studentRegistration/mail/views/studentCleared';
         SmisHelper::sendEmails([$emails], $layout, $view);
     }
 }

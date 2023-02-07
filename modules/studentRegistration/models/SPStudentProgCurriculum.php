@@ -46,9 +46,9 @@ class SPStudentProgCurriculum extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['student_id', 'registration_number', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'required'],
+            [['student_prog_curriculum_id', 'student_id', 'registration_number', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'required'],
             [['student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'default', 'value' => null],
-            [['student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'integer'],
+            [['student_prog_curriculum_id', 'student_id', 'prog_curriculum_id', 'student_category_id', 'adm_refno', 'status_id'], 'integer'],
             [['registration_number'], 'string', 'max' => 20],
 //            [['prog_curriculum_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalOrgProgrammeCurriculum::class, 'targetAttribute' => ['prog_curriculum_id' => 'prog_curriculum_id']],
 //            [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmisportalSmStudent::class, 'targetAttribute' => ['student_id' => 'student_id']],

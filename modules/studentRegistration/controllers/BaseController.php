@@ -16,6 +16,12 @@ class BaseController extends Controller
 
     const PRE_REGISTERED_STATUS = 'PRE-REGISTRATION';
 
+    const ACADEMIC_PROGRESS_STATUS_REGISTERED = 'REGISTERED';
+
+    const ACADEMIC_PROGRESS_ACTIVE = 'ACTIVE';
+
+    const STUDENT_SEMESTER_SESSION_STATUS_REPORTED = 'REPORTED';
+
     /**
      * Setup controllers with initial data
      * @return void

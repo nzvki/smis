@@ -65,7 +65,7 @@ class SPStudent extends ActiveRecord
             [['student_id', 'sponsor'], 'default', 'value' => null],
             [['student_id', 'sponsor'], 'integer'],
             [['registration_date', 'date_of_birth'], 'safe'],
-            [['student_number', 'passport_no', 'post_address', 'service '], 'string', 'max' => 20],
+            [['student_number', 'passport_no', 'post_address', 'service'], 'string', 'max' => 20],
             [['surname', 'primary_phone_no', 'alternative_phone_no', 'town', 'nationality'], 'string', 'max' => 50],
             [['other_names', 'primary_email', 'alternative_email'], 'string', 'max' => 100],
             [['gender'], 'string', 'max' => 1],
@@ -102,7 +102,7 @@ class SPStudent extends ActiveRecord
             'post_code' => 'Post Code',
             'post_address' => 'Post Address',
             'town' => 'Town',
-            'service ' => 'Service',
+            'service' => 'Service',
             'nationality' => 'Nationality',
             'date_of_birth' => 'Date Of Birth',
         ];
