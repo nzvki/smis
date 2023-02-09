@@ -6,7 +6,7 @@ use yii\db\Connection;
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-return [
+$db = [
     'class' => Connection::class,
     'dsn' => 'pgsql:host='.$_ENV['DB_HOST'].';dbname='.$_ENV['DB_NAME'],
     'username' => $_ENV['DB_USER'],
@@ -22,3 +22,13 @@ return [
 //        PDO::NULL_TO_STRING => false,
 //    ],
 ];
+
+$dbDev = [];
+if (file_exists(__DIR__ . '/db.local.php')) {
+    $dbDev = require_once(__DIR__ . '/db.local.php');
+}
+
+return yii\helpers\ArrayHelper::merge(
+    $db,
+    $dbDev
+);
