@@ -2,6 +2,7 @@
 
 $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
+$smDb = require __DIR__ . '/sm_db.php';
 
 $config = [
     'id' => 'basic-console',
@@ -10,7 +11,7 @@ $config = [
     'controllerNamespace' => 'app\commands',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
         '@tests' => '@app/tests',
     ],
     'components' => [
@@ -26,15 +27,18 @@ $config = [
             ],
         ],
         'db' => $db,
+        'sm_db' => $smDb,
     ],
     'params' => $params,
-    /*
     'controllerMap' => [
         'fixture' => [ // Fixture generation command line.
             'class' => 'yii\faker\FixtureController',
         ],
+        'migrate' => [
+            'class' => \yii\console\controllers\MigrateController::class,
+            'migrationTable' => 'test_migration'
+        ],
     ],
-    */
 ];
 
 if (YII_ENV_DEV) {
