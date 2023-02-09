@@ -124,13 +124,13 @@ SELECT
 	org_programme_curriculum.start_date,
 	org_programme_curriculum.end_date
 FROM
-	sm_student_id_request
-	INNER JOIN sm_student_programme_curriculum ON sm_student_id_request.student_prog_curr_id = sm_student_programme_curriculum.student_prog_curriculum_id
-	INNER JOIN org_programme_curriculum ON sm_student_programme_curriculum.prog_curriculum_id = org_programme_curriculum.prog_curriculum_id
-	INNER JOIN org_programmes ON org_programme_curriculum.prog_id = org_programmes.prog_id
-	INNER JOIN sm_student_category ON sm_student_programme_curriculum.student_category_id = sm_student_category.std_category_id
-	INNER JOIN org_prog_type ON org_programmes.prog_type_id = org_prog_type.prog_type_id
-	INNER JOIN sm_student ON sm_student_programme_curriculum.student_id = sm_student.student_id
+	smis.sm_student_id_request
+	INNER JOIN smis.sm_student_programme_curriculum ON sm_student_id_request.student_prog_curr_id = sm_student_programme_curriculum.student_prog_curriculum_id
+	INNER JOIN smis.org_programme_curriculum ON sm_student_programme_curriculum.prog_curriculum_id = org_programme_curriculum.prog_curriculum_id
+	INNER JOIN smis.org_programmes ON org_programme_curriculum.prog_id = org_programmes.prog_id
+	INNER JOIN smis.sm_student_category ON sm_student_programme_curriculum.student_category_id = sm_student_category.std_category_id
+	INNER JOIN smis.org_prog_type ON org_programmes.prog_type_id = org_prog_type.prog_type_id
+	INNER JOIN smis.sm_student ON sm_student_programme_curriculum.student_id = sm_student.student_id
 SQL;
     }
 }
