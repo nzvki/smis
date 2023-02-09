@@ -15,6 +15,7 @@ use yii\db\DataReader;
 use yii\db\Exception;
 use yii\db\Expression;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -191,7 +192,8 @@ class ManageStudentIdController extends Controller
         if ($saved) {
             //update request to closed
             $newStatus = IdRequestStatus::getStatusId(IdRequestStatus::CLOSED);
-            $idRequest->status_id = $newStatus[0];
+
+            $idRequest->status_id = ArrayHelper::getValue($newStatus, 0);
             $idRequest->validate();
             $saved = $idRequest->save();
         }
