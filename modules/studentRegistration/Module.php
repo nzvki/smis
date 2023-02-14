@@ -7,6 +7,7 @@ namespace app\modules\studentRegistration;
 
 use Yii;
 use yii\base\InvalidConfigException;
+use yii\console\Application;
 
 class Module extends \yii\base\Module
 {
@@ -17,16 +18,22 @@ class Module extends \yii\base\Module
     {
         parent::init();
 
-        Yii::configure(Yii::$app, require __DIR__ . '/config/web.php');
+        if (Yii::$app instanceof Application) {
+            Yii::configure(Yii::$app, require __DIR__ . '/config/console.php');
 
-        $this->layout = 'main';
+            $this->controllerNamespace = 'app\modules\studentRegistration\commands';
+        }else{
+            Yii::configure(Yii::$app, require __DIR__ . '/config/web.php');
 
-        $this->controllerNamespace = 'app\modules\studentRegistration\controllers';
+            $this->layout = 'main';
 
-        $handler = $this->get('errorHandler');
+            $this->controllerNamespace = 'app\modules\studentRegistration\controllers';
 
-        Yii::$app->set('errorHandler', $handler);
+            $handler = $this->get('errorHandler');
 
-        $handler->register();
+            Yii::$app->set('errorHandler', $handler);
+
+            $handler->register();
+        }
     }
 }
