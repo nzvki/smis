@@ -30,9 +30,6 @@ $config = [
         'sm_db' => $smDb,
     ],
     'params' => $params,
-    'controllerMap' => [
-        'fixture' => [ // Fixture generation command line.
-            'class' => 'yii\faker\FixtureController',
     'modules' => [
         'student-registration' => [
             'class' => 'app\modules\studentRegistration\Module',
