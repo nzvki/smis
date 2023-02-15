@@ -25,7 +25,7 @@ class DocumentsController extends BaseController
     public function actionSync()
     {
         $transaction = Yii::$app->db->beginTransaction();
-        SmisHelper::logMessage('Checking for documents to sync..', __METHOD__);
+        SmisHelper::logMessage('Registration documents sync started.', __METHOD__);
         try{
             $admittedStudentsToSync = SPAdmittedStudent::find()->select(['adm_refno'])->where(['document_sync_status' => false])
                 ->asArray()->all();
@@ -83,7 +83,7 @@ class DocumentsController extends BaseController
                 }
             }
             $transaction->commit();
-            SmisHelper::logMessage('Registration documents syncing finished.', __METHOD__);
+            SmisHelper::logMessage('Registration documents sync finished.', __METHOD__);
         }catch (Exception $ex){
             $transaction->rollBack();
             $message = $ex->getMessage();
