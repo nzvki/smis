@@ -121,4 +121,27 @@ class SmisHelper
     {
         return  Yii::$app->params['downloadRegDocUrl'] . '?submittedDocId=' . $submittedDocId . '&admRefNo=' . $admRefNo;
     }
+
+    /**
+     * Log messages
+     * @param string $message message to log
+     * @param string $category category of a message
+     * @param string $method method to use when logging a message
+     * @return void
+     * @throws Exception
+     */
+    public static function logMessage(string $message, string $category, string $method = 'info'): void
+    {
+        echo $message . PHP_EOL;
+
+        if($method === 'info'){
+            Yii::info($message, $category);
+        }elseif ($method === 'error'){
+            Yii::error($message, $category);
+        }elseif ($method === 'warning'){
+            Yii::warning($message, $category);
+        }else{
+            throw new Exception('Specify the correct logging method.');
+        }
+    }
 }
