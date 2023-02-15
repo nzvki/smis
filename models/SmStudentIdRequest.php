@@ -2,8 +2,6 @@
 
 namespace app\models;
 
-use Yii;
-
 /**
  * This is the model class for table "sm_student_id_request".
  *
@@ -21,6 +19,8 @@ use Yii;
  */
 class SmStudentIdRequest extends \app\extended\BaseModel
 {
+    public $receipt_number;
+
     /**
      * {@inheritdoc}
      */

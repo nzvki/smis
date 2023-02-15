@@ -15,6 +15,7 @@ use yii\db\DataReader;
 use yii\db\Exception;
 use yii\db\Expression;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -161,6 +162,7 @@ class ManageStudentIdController extends Controller
      * @param int $id
      * @return string|Response
      * @throws NotFoundHttpException|Exception
+     * @throws \Exception
      */
     public function actionPrintSingle(int $id): string|Response
     {
@@ -172,7 +174,8 @@ class ManageStudentIdController extends Controller
 
         //updated id request status
         $requestStatus = IdRequestStatus::getStatusId();
-        $idRequest = $this->findModel($id, $requestStatus[0]);
+        $requestStatusId = ArrayHelper::getValue($requestStatus, 0, 0s);
+        $idRequest = $this->findModel($id, $requestStatusId);
         $newId = new StudentId();
         $newId->student_prog_curr_id = $model['student_prog_curr_id'];
         $newId->printing_date = new Expression('CURRENT_TIMESTAMP');
@@ -191,7 +194,8 @@ class ManageStudentIdController extends Controller
         if ($saved) {
             //update request to closed
             $newStatus = IdRequestStatus::getStatusId(IdRequestStatus::CLOSED);
-            $idRequest->status_id = $newStatus[0];
+
+            $idRequest->status_id = ArrayHelper::getValue($newStatus, 0, 0);
             $idRequest->validate();
             $saved = $idRequest->save();
         }
