@@ -174,7 +174,7 @@ class ManageStudentIdController extends Controller
 
         //updated id request status
         $requestStatus = IdRequestStatus::getStatusId();
-        $requestStatusId = ArrayHelper::getValue($requestStatus, 0, 0s);
+        $requestStatusId = ArrayHelper::getValue($requestStatus, 0, 0);
         $idRequest = $this->findModel($id, $requestStatusId);
         $newId = new StudentId();
         $newId->student_prog_curr_id = $model['student_prog_curr_id'];
