@@ -582,8 +582,11 @@ class DocumentsController extends BaseController
      */
     private function getIdForAvailableSession(string $regNumber)
     {
-        $studentProgCurr = StudentProgCurriculum::find()->select(['prog_curriculum_id'])
+        $studentProgCurr = StudentProgCurriculum::find()->select(['prog_curriculum_id', 'adm_refno'])
             ->where(['registration_number' => $regNumber])->asArray()->one();
+
+        $admittedStudent = AdmittedStudent::find()->select('study_centre_group_id')
+            ->where(['adm_refno' => $studentProgCurr['adm_refno']])->asArray()->one();
 
         $currentDate = SmisHelper::formatDate('now', 'Y-m-d');
 
@@ -594,6 +597,8 @@ class DocumentsController extends BaseController
             ])
             ->where(['<=', 'pcsg.start_date', $currentDate])
             ->andWhere(['>=', 'pcsg.end_date', $currentDate])
+            ->andWhere(['pcsg.programme_level' => 1]) // new students come in at level 1
+            ->andWhere(['study_centre_group_id' => $admittedStudent['study_centre_group_id']])
             ->joinWith(['progCurrSemester pcs' => function(ActiveQuery $q){
                 $q->select([
                     'pcs.prog_curriculum_semester_id',
@@ -610,6 +615,48 @@ class DocumentsController extends BaseController
             }], true, 'INNER JOIN')
             ->asArray()
             ->one();
+
+        return $programmeCurriculumSemGroup['progCurrSemester']['academicSessionSemester']['acad_session_id'];
+    }
+
+    public function actionTest()
+    {
+        $regNumber = 'P15/247/2023';
+        $studentProgCurr = StudentProgCurriculum::find()->select(['prog_curriculum_id', 'adm_refno'])
+            ->where(['registration_number' => $regNumber])->asArray()->one();
+
+        $admittedStudent = AdmittedStudent::find()->select('study_centre_group_id')
+            ->where(['adm_refno' => $studentProgCurr['adm_refno']])->asArray()->one();
+
+        $currentDate = SmisHelper::formatDate('now', 'Y-m-d');
+
+        $programmeCurriculumSemGroup = ProgCurrSemesterGroup::find()->alias('pcsg')
+            ->select([
+                'pcsg.prog_curriculum_sem_group_id',
+                'pcsg.prog_curriculum_semester_id'
+            ])
+            ->where(['<=', 'pcsg.start_date', $currentDate])
+            ->andWhere(['>=', 'pcsg.end_date', $currentDate])
+            ->andWhere(['pcsg.programme_level' => 1]) // new students come it at level 1
+            ->andWhere(['study_centre_group_id' => $admittedStudent['study_centre_group_id']])
+            ->joinWith(['progCurrSemester pcs' => function(ActiveQuery $q){
+                $q->select([
+                    'pcs.prog_curriculum_semester_id',
+                    'pcs.prog_curriculum_id',
+                    'pcs.acad_session_semester_id'
+                ]);
+            }], true, 'INNER JOIN')
+            ->andWhere(['pcs.prog_curriculum_id' => $studentProgCurr['prog_curriculum_id']])
+            ->joinWith(['progCurrSemester.academicSessionSemester assem' => function(ActiveQuery $q){
+                $q->select([
+                    'assem.acad_session_semester_id',
+                    'assem.acad_session_id'
+                ]);
+            }], true, 'INNER JOIN')
+            ->asArray()
+            ->one();
+
+        dd($programmeCurriculumSemGroup);
 
         return $programmeCurriculumSemGroup['progCurrSemester']['academicSessionSemester']['acad_session_id'];
     }

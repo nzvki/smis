@@ -153,4 +153,26 @@ class SiteController extends BaseController
 
         return $this->goHome();
     }
+
+    /**
+     * Run sync cron jobs from browser only for demos
+     * @return void
+     */
+    public function actionSync(): void
+    {
+        $output = shell_exec('/usr/bin/php /var/www/html/smis/yii student-registration/documents/sync');
+        echo "<pre>$output</pre>";
+        echo "-------------------------------------------------------------------------------------------------------";
+        echo PHP_EOL;
+
+        $output = shell_exec('/usr/bin/php /var/www/html/smis/yii student-registration/profile/sync');
+        echo "<pre>$output</pre>";
+        echo "-------------------------------------------------------------------------------------------------------";
+        echo PHP_EOL;
+
+        $output = shell_exec('/usr/bin/php /var/www/html/smis/yii student-registration/session-reporting/sync');
+        echo "<pre>$output</pre>";
+        echo "-------------------------------------------------------------------------------------------------------";
+        echo PHP_EOL;
+    }
 }
