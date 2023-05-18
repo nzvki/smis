@@ -7,7 +7,10 @@ return [
     'orgName' => 'NDU-K',
     'adminEmail' => 'admin@example.com',
     'senderEmail' => 'noreply@example.com',
+    'supportEmail' => 'noreply@example.com',
     'senderName' => 'Example.com mailer',
+    'sitename' => 'smis',
+    'sitenameLong' => 'smis',
 
     // Sys Configs
     'gender' => ['M' => 'MALE', 'F' => 'FEMALE'],
@@ -17,4 +20,7 @@ return [
     'image' => [
         'default' => ['width' => 150, 'height' => 180,]
     ],
+
+    // password reset url
+    'resetPasswordUrl' => 'http://usermgtdev.uonbi.ac.ke/site/reset-password',
 ];

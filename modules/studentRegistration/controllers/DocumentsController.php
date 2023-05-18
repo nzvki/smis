@@ -121,7 +121,6 @@ class DocumentsController extends BaseController
                 'categoriesList' => $categoriesList
             ]);
         }catch (Exception $ex){
-//            $transaction->rollBack();
             $message = $ex->getMessage();
             if(YII_ENV_DEV){
                 $message .= ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
@@ -577,6 +576,8 @@ class DocumentsController extends BaseController
     }
 
     /**
+     * @todo recheck the academic session id from the org_academic_session table
+     *
      * @throws Exception
      */
     private function getIdForAvailableSession(string $regNumber)
@@ -667,6 +668,8 @@ class DocumentsController extends BaseController
     }
 
     /**
+     * @todo check for the student group too before selecting semester
+     *
      * @throws Exception
      */
     private function createStudentSemesterSessionProgress(array $progressDetails)

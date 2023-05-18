@@ -28,8 +28,8 @@ class SemesterType extends ActiveRecord
     public function rules(): array
     {
         return [
-            [['sem_type'], 'required'],
-            [['sem_type'], 'string', 'max' => 15],
+            [['semester_type'], 'required'],
+            [['semester_type'], 'string', 'max' => 15],
         ];
     }
 
@@ -39,8 +39,8 @@ class SemesterType extends ActiveRecord
     public function attributeLabels(): array
     {
         return [
-            'sem_type_id' => 'Sem Type ID',
-            'sem_type' => 'Sem Type',
+            'semester_type_id' => 'Semester Type ID',
+            'semester_type  ' => 'Semester Type',
         ];
     }
 }

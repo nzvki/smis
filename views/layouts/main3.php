@@ -1,15 +1,20 @@
 <?php
+/**
+ * @author Rufusy Idachi <idachirufus@gmail.com>
+ * @date: 5/15/2023
+ * @time: 10:17 PM
+ */
 
-/** @var yii\web\View $this */
-/** @var string $content */
+/* @var $this View */
+/* @var $content string */
 
-use app\assets\FontAwesomeAsset;
 use app\modules\studentRegistration\assets\AppAsset;
-use app\widgets\Alert;
 use kartik\growl\Growl;
 use yii\bootstrap5\BootstrapIconAsset;
-use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
+use yii\helpers\Url;
+use yii\web\View;
+use app\assets\FontAwesomeAsset;
 
 FontAwesomeAsset::register($this);
 AppAsset::register($this);
@@ -28,69 +33,50 @@ BootstrapIconAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="d-flex flex-column h-100">
+
+<body class="hold-transition sidebar-mini layout-fixed">
 <?php $this->beginBody() ?>
-<main>
-    <nav class="border-bottom" style="background-color: #d82323;">
-        <header class="py-3 border-bottom">
-            <div class="container-fluid d-flex justify-content-between fs-5" style="grid-template-columns: 1fr 1fr;">
-                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none fw-1 text-white">
-                    SMIS
+
+<div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                    <i class="fa fa-bars" aria-hidden="true"></i>
                 </a>
+            </li>
+        </ul>
 
-                <div class="d-flex justify-content-end">
-                    <div class="flex-shrink-0 dropdown w-100 me-3">
-                        <a href="javascript:void(0);" class="d-block link-light text-decoration-none dropdown-toggle" id="dropdownUser2"
-                           data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-person-bounding-box"></i> <?=Yii::$app->user->identity->username?>
-                        </a>
-                        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                            <li>
-                                <?= Html::a('Change password', Yii::$app->params['resetPasswordUrl'],
-                                    [
-                                        'title' => 'Change password',
-                                        'class' => 'dropdown-item btn-link',
-                                    ])
-                                ?>
-                            </li>
-                            <li>
-                                <?= Html::a('Sign Out', ['logout'],
-                                    [
-                                        'class' => 'dropdown-item btn-link',
-                                        'data' => ['method' => 'post']
-                                    ])
-                                ?>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </header>
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="<?= Url::to(['/site/logout']); ?>">
+                    <i class="nav-icon fa fa-sign-out" aria-hidden="true"></i>
+                    sign out
+                </a>
+            </li>
+        </ul>
     </nav>
-    <div class="container-fluid">
-        <?php
-        try {
-            echo Breadcrumbs::widget([
-                'links' => $this->params['breadcrumbs'] ?? [],
-            ]);
+    <!-- /.navbar -->
 
-            echo Alert::widget();
+    <?= $this->render('./sidebar'); ?>
 
-            echo $content;
-
-        } catch (Throwable $e) {
-        }
-        ?>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <?= $content ?>
     </div>
-</main>
 
-<footer class="footer mt-auto py-3 text-white font-weight-bold" style="background-color: #304186">
-    <div class="container ">
-        <span class="float-start">
-            &copy;<?= date('Y') . ' ' . Yii::$app->params['orgName'] ?> | PRUDENTIA, EXCELLENCIA ET OPERA
-        </span>
-    </div>
-</footer>
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>
+            Do you need help? Send a message to <?=Yii::$app->params['supportEmail']?>
+        </strong>
+    </footer>
+
+</div>
+<!-- ./wrapper -->
 
 <?php
 $flashType = '';

@@ -1,59 +1,68 @@
 <?php
+/**
+ * @author Rufusy Idachi <idachirufus@gmail.com>
+ * @date: 5/8/2023
+ * @time: 10:13 PM
+ */
 
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
+/**
+ * @var $this yii\web\View
+ * @var $model app\models\LoginForm
+ * @var string $title
+ */
 
-/** @var app\models\LoginForm $model */
-
-use yii\bootstrap5\ActiveForm;
-use yii\bootstrap5\Html;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 $this->title = 'Login';
+
 ?>
-<?php $form = ActiveForm::begin([
-    'id' => 'login-form',
-    'options' => ['class'=>'px-4 py-1 rounded',],
-    'fieldConfig' => [
-        'template' => '<div class="form-floating">{input}{label}{error}</div>',
-        'labelOptions' => ['class' => false, 'tag' => false,],
-        'inputOptions' => ['class' => 'form-control', 'tag' => false, 'placeholder' => 'Needed'],
-        'errorOptions' => ['class' => 'invalid-feedback'],
-    ],
-]); ?>
+<div class="login-box">
+    <div data-aos="fade-left">
+        Login
+    </div>
 
-    <img class="mb-2 logo" src="/img/ndu-arms.png" alt="Logo">
-    <h1 class="h3 mb-3 fw-normal">Log In</h1>
+    <div class="card">
+        <div class="card-body login-card-body">
 
-<?= $form->field($model, 'username', ['options' => ['class' => 'form-floating']])->textInput() ?>
-<?= $form->field($model, 'password', ['options' => ['class' => 'form-floating']])->passwordInput() ?>
+            <div style="padding: 20px; ">
+                <img class="mx-auto d-block" style="height: 100px;" src="<?=Yii::getAlias('@web');?>/img/ndu-arms.png" alt="Logo">
+            </div>
 
-<!--
-<?= $form->field($model, 'rememberMe')->checkbox([
-    'template' => "<div class=\"checkbox mb-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-]) ?>
--->
+            <div id="login-form">
+                <?php
+                $form = ActiveForm::begin([
+                    'action' => Url::to(['/site/process-login']),
+                ]);
 
-<?= Html::submitButton('Login', ['class' => 'w-100 btn btn-lg btn-primary', 'name' => 'login-button']) ?>
-    <p class="mt-1 mb-3"><?= Html::a('Reset Password','javascript:void(0)', ['class' => 'w-100']) ?></p>
-    <p class="mt-5 mb-3">&copy; <?= date('Y') ?></p>
+                echo $form->field($model, 'username')
+                    ->textInput(['class' => 'form-control'])
+                    ->label('Username', ['class' => 'required-control-label'])
+                    ->hint('Type in your payroll number', ['id' => 'username-hint', 'tag' => 'small', 'class' => 'text-muted']);
 
-<?php ActiveForm::end(); ?>
+                echo $form->field($model, 'password')
+                    ->textInput([
+                        'type' => 'password',
+                        'class' => 'form-control'
+                    ])
+                    ->label('Password', ['class' => 'required-control-label']);
+                ?>
 
-<?php
-$this->registerCss(
-    <<<CSS
-body{
-    background-image: url('/img/ndu-model.jpg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-}
-.logo{
-    height: 90px;
-}
-.invalid-feedback{
-    font-weight: bold;
-    text-shadow: 0 0 10px #fff;
-}
-CSS
-);
+                <div class="row">
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success btn-block">Sign In</button>
+                    </div>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+
+                <p class="mb-1" style="margin-top: 20px;">
+                    <a href="<?=Yii::$app->params['resetPasswordUrl']?>" class="btn-link">I forgot my password</a>
+                </p>
+            </div>
+        </div>
+        <!-- /.login-card-body -->
+    </div>
+</div>
+<!-- /.login-box -->

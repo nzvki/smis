@@ -1,24 +1,29 @@
 <?php
+/**
+ * @author Rufusy Idachi <idachirufus@gmail.com>
+ * @date: 5/8/2023
+ * @time: 10:13 PM
+ */
 
 namespace app\controllers;
 
+use app\helpers\SmisHelper;
+use app\models\LoginForm;
+use app\models\User;
+use Exception;
+use JetBrains\PhpStorm\ArrayShape;
 use Yii;
 use yii\filters\AccessControl;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
-use yii\web\ErrorAction;
-use yii\captcha\CaptchaAction;
+use yii\web\ServerErrorHttpException;
 
-class SiteController extends Controller
+class SiteController extends BaseController
 {
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    #[ArrayShape(['access' => "array"])]
+    public function behaviors(): array
     {
         return [
             'access' => [
@@ -31,88 +36,118 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
+            ]
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function actions()
+    #[ArrayShape(['error' => "string[]"])]
+    public function actions(): array
     {
         return [
             'error' => [
-                'class' => ErrorAction::class,
-            ],
-            'captcha' => [
-                'class' => CaptchaAction::class,
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
+                'class' => 'yii\web\ErrorAction',
+            ]
         ];
     }
 
     /**
-     * @throws BadRequestHttpException
+     * {@inheritdoc}
      */
     public function beforeAction($action): bool
     {
-        $this->layout = match ($this->id) {
-            'login' => 'login',
-            default => 'main',
-        };
-        return parent::beforeAction($action);
-    }
-
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
-    public function actionIndex(): string
-    {
-        // Select Layout based on User Type
-        $this->layout = Yii::$app->user->isGuest ? 'blank' : $this->layout;
-
-        return Yii::$app->user->isGuest ?
-            $this->render('guest') : $this->render('index');
-
-    }
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        $this->layout = 'login';
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        if(parent::beforeAction($action)) {
+            if ($action->id == 'error') {
+                $this->layout = 'error';
+            }
+            return true;
         }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return false;
     }
 
     /**
-     * Logout action.
-     *
+     * @return string|Response
+     */
+    public function actionIndex(): Response|string
+    {
+        if(Yii::$app->user->isGuest){
+            return $this->redirect(['/site/login']);
+        }
+        return $this->render('index');
+    }
+
+    /**
+     * @return string|\yii\console\Response|Response
+     * @throws ServerErrorHttpException
+     */
+    public function actionLogin(): Response|string|\yii\console\Response
+    {
+        try {
+            if (Yii::$app->user->isGuest) {
+                $this->layout = 'login';
+                return $this->render('login', [
+                    'title' => $this->createPageTitle('login'),
+                    'model' => new LoginForm()
+                ]);
+            } else {
+                return Yii::$app->response->redirect(['/site/index']);
+            }
+        }catch(Exception $ex){
+            $message = $ex->getMessage();
+            if(YII_ENV_DEV){
+                $message .= ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
+            }
+            throw new ServerErrorHttpException($message, 500);
+        }
+    }
+
+    /**
+     * @return Response|string|\yii\console\Response
+     * @throws ServerErrorHttpException
+     */
+    public function actionProcessLogin(): Response|string|\yii\console\Response
+    {
+        try {
+            $model = new LoginForm();
+            if($model->load(Yii::$app->request->post())){
+                if($model->validate()){
+                    $user = User::findByUsername($model->username);
+
+                    if(empty($user) || empty($user->password) || !$user->validatePassword($model->password)){
+                        $this->setFlash('danger', 'Login', 'Incorrect username or password.');
+                        return $this->redirect(['/site/login']);
+                    }
+
+                    if(Yii::$app->user->login($user)){
+                        $user->last_login_at = SmisHelper::formatDate('now', 'Y-m-d h:i:s');
+                        if(!$user->save()){
+                            throw new Exception('Failed to update login time.');
+                        }
+                        return $this->goHome();
+                    }else{
+                        throw new Exception('An error occurred while trying to log in.');
+                    }
+                }else{
+                    $this->setFlash('danger', 'Login', 'Incorrect username or password.');
+                    return $this->redirect(['/site/login']);
+                }
+            }
+            return $this->redirect(['/site/login']);
+        }catch(Exception $ex){
+            $message = $ex->getMessage();
+            if(YII_ENV_DEV){
+                $message .= ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
+            }
+            throw new ServerErrorHttpException($message, 500);
+        }
+    }
+
+    /**
      * @return Response
      */
-    public function actionLogout()
+    public function actionLogout(): Response
     {
         Yii::$app->user->logout();
 

@@ -58,6 +58,11 @@ $config = [
                 '<module>/<controller>/<action:(update|delete|view|report-lost-id|print-single)>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
+        'formatter' => [
+            'defaultTimeZone' => 'Africa/Nairobi',
+            'dateFormat' => 'd-M-Y',
+            'datetimeFormat' => 'd-M-Y H:i:s'
+        ],
     ],
     'params' => $params,
     'modules' => [

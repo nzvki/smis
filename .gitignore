@@ -36,4 +36,7 @@ tests/_support/_generated
 /.vagrant
 
 /runtime
+
 /config/db.local.php
+
+/web/assets
