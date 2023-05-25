@@ -82,6 +82,9 @@ $config = [
             'class' => 'app\modules\studentid\Module',
             'defaultRoute' => 'manage-student-id'
         ],
+        'exam-management' => [
+            'class' => 'app\modules\examManagement\Module',
+        ],
         // Other TP Modules
         'gridview' => [
             'class' => \kartik\grid\Module::class
