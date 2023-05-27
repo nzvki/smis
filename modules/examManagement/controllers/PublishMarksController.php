@@ -73,7 +73,7 @@ class PublishMarksController extends BaseController
                 ->asArray()->one();
 
             return $this->render('programmes', [
-                'title' => 'Programmes',
+                'title' => $this->createPageTitle('Programmes'),
                 'departName' => $employee['dept_code'],
                 'progDataProvider' => $dataProvider,
                 'progSearchModel' => $progSearchModel
@@ -98,7 +98,7 @@ class PublishMarksController extends BaseController
         try{
             $academicLevels = AcademicLevel::find()->orderBy(['academic_level' => SORT_ASC])->asArray()->all();
             return $this->render('firstStageFilters', [
-                'title' => 'timetables filters',
+                'title' => $this->createPageTitle('timetables filters'),
                 'progCode' => $progCode,
                 'progCurrId' => $progCurrId,
                 'academicLevels' => $academicLevels
@@ -170,6 +170,9 @@ class PublishMarksController extends BaseController
                 ->where(['status' => 'ACTIVE'])
                 ->asArray()->all();
 
+            $programme = Programme::find()->select(['prog_full_name', 'prog_short_name'])->where(['prog_code' => $code])
+                ->asArray()->one();
+
             $semesterGroups = ProgCurrSemesterGroup::find()->alias('psg')
                 ->select([
                     'psg.prog_curriculum_sem_group_id',
@@ -206,17 +209,13 @@ class PublishMarksController extends BaseController
             $semester = [];
             foreach ($semesterGroups as $semesterGroup){
                 $acadSessSem = $semesterGroup['progCurrSemester']['academicSessionSemester'];
-
                 $semester['code'] = $acadSessSem['semester_code'];
                 $semester['description'] = $acadSessSem['acad_session_semester_desc'];
-
                 $semesters[] = $semester;
             }
 
-            $programme = Programme::find()->select(['prog_full_name', 'prog_short_name'])->where(['prog_code' => $code])->asArray()->one();
-
             return $this->render('courses', [
-                'title' => 'courses',
+                'title' => $this->createPageTitle('courses'),
                 'progName' => $programme['prog_short_name'],
                 'dataProvider' => $dataProvider,
                 'searchModel' => $timetablesSearchModel,
