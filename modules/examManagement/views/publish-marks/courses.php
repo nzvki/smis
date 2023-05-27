@@ -11,6 +11,7 @@
  * @var string $progName
  * @var string $progCode
  * @var string $level
+ * @var string $progCurrId
  * @var string $year
  * @var string[] $academicLevels
  * @var string[] $semesters
@@ -45,7 +46,8 @@ $this->title = $title;
                 'level' => $level,
                 'academicLevels' => $academicLevels,
                 'groups' => $groups,
-                'semesters' => $semesters
+                'semesters' => $semesters,
+                'progCurrId' => $progCurrId,
         ]); ?>
 
         <div class="row">
@@ -160,3 +162,7 @@ $this->title = $title;
         </div>
     </div>
 </section>
+
+
+
+

@@ -58,6 +58,10 @@ class TimetablesSearch extends ProgrammeCurriculumTimetable
      */
     public function search(array $params, array $moreParams = []): ActiveDataProvider
     {
+        $marksheetId = $moreParams['marksheetId'];
+        $semesterCode = $moreParams['semesterCode'];
+        $groupId = $moreParams['groupId'];
+
         $query = ProgrammeCurriculumTimetable::find()->alias('pct')
             ->select([
                 'pct.timetable_id',
@@ -65,7 +69,7 @@ class TimetablesSearch extends ProgrammeCurriculumTimetable
                 'pct.prog_curriculum_course_id',
                 'pct.prog_curriculum_sem_group_id'
             ])
-            ->where(['like', 'pct.mrksheet_id', $moreParams['marksheetId'] . '%', false])
+            ->where(['like', 'pct.mrksheet_id', $marksheetId . '%', false])
             ->joinWith(['programmeCurriculumCourse pcc' => function (ActiveQuery $q) {
                 $q->select([
                     'pcc.prog_curriculum_course_id',
@@ -85,32 +89,35 @@ class TimetablesSearch extends ProgrammeCurriculumTimetable
                     'pcsg.prog_curriculum_semester_id',
                     'pcsg.study_centre_group_id'
                 ]);
-            }])
-            ->joinWith(['programmeCurriculumSemesterGroup.progCurrSemester pcs' => function(ActiveQuery $q){
-                $q->select([
-                    'pcs.prog_curriculum_semester_id',
-                    'pcs.acad_session_semester_id'
-                ]);
-            }])
-            ->joinWith(['programmeCurriculumSemesterGroup.progCurrSemester.academicSessionSemester ass' => function(ActiveQuery $q){
-                $q->select([
-                    'ass.acad_session_semester_id',
-                    'ass.semester_code'
-                ]);
-            }])
-            ->joinWith(['programmeCurriculumSemesterGroup.studyCentreGroup scg' => function(ActiveQuery $q){
-                $q->select([
-                    'scg.study_centre_group_id',
-                    'scg.study_group_id'
-                ]);
-            }])
-            ->joinWith(['programmeCurriculumSemesterGroup.studyCentreGroup.group gr' => function(ActiveQuery $q){
-                $q->select([
-                    'gr.study_group_id',
-                    'gr.study_group_name'
-                ]);
-            }])
-            ->asArray();
+            }], true, 'INNER JOIN');
+
+            if(!empty($semesterCode)){
+                $query->joinWith(['programmeCurriculumSemesterGroup.progCurrSemester pcs' => function(ActiveQuery $q){
+                    $q->select([
+                        'pcs.prog_curriculum_semester_id',
+                        'pcs.acad_session_semester_id'
+                    ]);
+                }], true, 'INNER JOIN')
+                ->joinWith(['programmeCurriculumSemesterGroup.progCurrSemester.academicSessionSemester ass' => function(ActiveQuery $q){
+                    $q->select([
+                        'ass.acad_session_semester_id',
+                        'ass.semester_code'
+                    ]);
+                }], true, 'INNER JOIN')
+                ->andWhere(['ass.semester_code' => $semesterCode]);
+            }
+
+            if(!empty($groupId)){
+                $query->joinWith(['programmeCurriculumSemesterGroup.studyCentreGroup scg' => function(ActiveQuery $q){
+                    $q->select([
+                        'scg.study_centre_group_id',
+                        'scg.study_group_id'
+                    ]);
+                }], true, 'INNER JOIN')
+                ->andWhere(['scg.study_group_id' => $groupId]);
+            }
+
+            $query->asArray();
 
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,

@@ -63,7 +63,8 @@ $this->title = $title;
                             return Html::a('view courses',
                                 Url::to([
                                     '/exam-management/publish-marks/first-stage-filters',
-                                    'progCode' => $model['progCurriculum']['programme']['prog_code']
+                                    'progCode' => $model['progCurriculum']['programme']['prog_code'],
+                                    'progCurrId' => $model['prog_curriculum_id']
                                 ]),
                                 [
                                     'title' => 'View courses',

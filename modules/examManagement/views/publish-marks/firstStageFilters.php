@@ -9,6 +9,7 @@
  * @var yii\web\View $this
  * @var string $title
  * @var string $progCode
+ * @var string $progCurrId
  * @var string[] $academicLevels
  */
 
@@ -39,6 +40,7 @@ $this->title = $title;
                     <div class="card-body">
                         <form action="<?=Url::to(['/exam-management/publish-marks/courses']) ?>">
                             <input hidden name="code" value="<?=$progCode?>">
+                            <input hidden name="curr-id" value="<?=$progCurrId?>">
                             <div class="form-group row">
                                 <label for="year" class="col-sm-3 col-md-3 col-lg-3 offset-md-2 offset-lg-2 text-md-right text-lg-right col-form-label required-control-label">
                                     Year
