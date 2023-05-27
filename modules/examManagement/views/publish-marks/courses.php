@@ -80,8 +80,8 @@ $this->title = $title;
                         'marks' => function ($url, $model){
                             return Html::a('view marks',
                                 Url::to([
-                                    '/exam-management/publish-marks/view',
-                                    'progCode' => $model['mrksheet_id']
+                                    '/exam-management/publish-marks/list',
+                                    'marksheetId' => $model['mrksheet_id']
                                 ]),
                                 [
                                     'title' => 'View marks',

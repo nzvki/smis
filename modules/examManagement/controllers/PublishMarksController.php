@@ -8,6 +8,7 @@
 namespace app\modules\examManagement\controllers;
 
 use app\models\Employee;
+use app\modules\examManagement\models\search\MarksSearch;
 use app\modules\examManagement\models\search\ProgrammesSearch;
 use app\modules\examManagement\models\search\TimetablesSearch;
 use app\modules\studentRegistration\models\AcademicLevel;
@@ -236,8 +237,44 @@ class PublishMarksController extends BaseController
         }
     }
 
-    public function actionStudents()
+    /**
+     * @param string $marksheetId
+     * @return string
+     * @throws ServerErrorHttpException
+     */
+    public function actionList(string $marksheetId): string
     {
+        try{
+            $searchModel = new MarksSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams, [
+                'mrksheetId' => $marksheetId
+            ]);
 
+            $marksheetDetails = explode('_', $marksheetId);
+            $year = $marksheetDetails[0];
+            $code = $marksheetDetails[1];
+            $level = $marksheetDetails[2];
+            $semesterCode = $marksheetDetails[3];
+            $groupCode = $marksheetDetails[4];
+            $courseCode = $marksheetDetails[5];
+
+            $studyGroup = StudyGroup::findOne($groupCode);
+
+            $panelHeader = $year . ' - ' . $code . ' - LEVEL ' . $level . ' - SEMESTER ' . $semesterCode . ' - '.
+                strtoupper($studyGroup->study_group_name) . ' - ' . $courseCode;
+
+            return $this->render('list', [
+                'title' => $this->createPageTitle('marks'),
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'panelHeader' => $panelHeader
+            ]);
+        }catch (Exception $ex){
+            $message = $ex->getMessage();
+            if(YII_ENV_DEV) {
+                $message = $ex->getMessage() . ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
+            }
+            throw new ServerErrorHttpException($message, 500);
+        }
     }
 }
