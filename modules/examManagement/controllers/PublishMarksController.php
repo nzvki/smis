@@ -11,9 +11,12 @@ use app\models\Employee;
 use app\modules\examManagement\models\search\MarksSearch;
 use app\modules\examManagement\models\search\ProgrammesSearch;
 use app\modules\examManagement\models\search\TimetablesSearch;
+use app\modules\studentRegistration\helpers\SmisHelper;
 use app\modules\studentRegistration\models\AcademicLevel;
 use app\modules\studentRegistration\models\ProgCurrSemesterGroup;
 use app\modules\studentRegistration\models\Programme;
+use app\modules\studentRegistration\models\SPStudentCourse;
+use app\modules\studentRegistration\models\StudentCourse;
 use app\modules\studentRegistration\models\StudyGroup;
 use Exception;
 use JetBrains\PhpStorm\ArrayShape;
@@ -275,6 +278,90 @@ class PublishMarksController extends BaseController
                 $message = $ex->getMessage() . ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
             }
             throw new ServerErrorHttpException($message, 500);
+        }
+    }
+
+    /**
+     * @return Response
+     */
+    public function actionPublish(): Response
+    {
+        $transaction = Yii::$app->db->beginTransaction();
+        $spTransaction = Yii::$app->sm_db->beginTransaction();
+        try{
+            $post = Yii::$app->request->post();
+
+            /**
+             * Publish marks per course
+             */
+            if(array_key_exists('marksheetIds', $post)){
+                foreach ($post['marksheetIds'] as $marksheetId){
+                    $marksCount = StudentCourse::find()->where(['mrksheet_id' => $marksheetId])
+                        ->andWhere(['not', ['publish_status' => 1]])
+                        ->count();
+                    if($marksCount === 0){
+                        continue;
+                    }
+                    $updatedCount = StudentCourse::updateAll(['publish_status' => 1], ['mrksheet_id' => $marksheetId]);
+                    if($updatedCount === 0){
+                        throw new Exception('Marks failed to publish. Marksheet : ' . $marksheetId);
+                    }
+
+                    $studentCourses = StudentCourse::findAll(['mrksheet_id' => $marksheetId]);
+                    foreach ($studentCourses as $studentCourse){
+                        $this->syncStudentCourses($studentCourse);
+                    }
+                }
+            }
+
+            /**
+             * Publish marks per course per student
+             */
+            if(array_key_exists('studentCoursesIds', $post)){
+                $studentCourseIds = $post['studentCoursesIds'];
+                $updatedCount = StudentCourse::updateAll(['publish_status' => 1], ['in', 'student_courses_id', $studentCourseIds]);
+                if($updatedCount === 0){
+                    throw new Exception('Marks failed to publish. Marksheet : ');
+                }
+
+                foreach ($studentCourseIds as $studentCourseId){
+                    $studentCourse = StudentCourse::findOne($studentCourseId);
+                    $this->syncStudentCourses($studentCourse);
+                }
+            }
+
+            $transaction->commit();
+            $spTransaction->commit();
+            $this->setFlash('success', 'Publish marks', 'Marks published successfully.');
+            return $this->redirect(Yii::$app->request->referrer ?: Yii::$app->homeUrl);
+        }catch (Exception $ex){
+            $transaction->rollBack();
+            $spTransaction->rollBack();
+            $message = $ex->getMessage();
+            if(YII_ENV_DEV) {
+                $message = $ex->getMessage() . ' File: ' . $ex->getFile() . ' Line: ' . $ex->getLine();
+            }
+            return $this->asJson(['success' => false, 'message' => $message]);
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function syncStudentCourses(StudentCourse $studentCourse)
+    {
+        $spStudentCourse = SPStudentCourse::findOne($studentCourse->student_courses_id);
+        if(is_null($spStudentCourse)){
+            $spStudentCourse = new SPStudentCourse();
+        }
+        $spStudentCourse->setAttributes(($studentCourse->attributes));
+        if(!$spStudentCourse->save()){
+            if(!$spStudentCourse->validate()){
+                $errorMessage = SmisHelper::getModelErrors($spStudentCourse->getErrors());
+                throw new Exception($errorMessage);
+            }else{
+                throw new Exception('Student marks publishing failed to sync.');
+            }
         }
     }
 }

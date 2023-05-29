@@ -52,6 +52,10 @@ $this->title = $title;
 
         <div class="row">
             <div class="col-10 offset-1">
+                <div class="courses">
+                    <div class="loader"></div>
+                    <div class="error-display alert text-center" role="alert"></div>
+                </div>
                 <?php
                 $mrksheetIdCol = [
                     'attribute' => 'mrksheet_id',
@@ -124,7 +128,7 @@ $this->title = $title;
 
                 try{
                     echo GridView::widget([
-                        'id' => 'programmes-grid',
+                        'id' => 'courses-grid',
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => $gridColumns,
@@ -162,6 +166,11 @@ $this->title = $title;
         </div>
     </div>
 </section>
+
+<?php
+$this->render('postMarksToPublish', ['filterLevel' => 'courses']);
+
+
 
 
 

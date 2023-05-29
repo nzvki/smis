@@ -4,6 +4,7 @@
  */
 namespace app\modules\studentRegistration\models;
 
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
 /**
@@ -28,6 +29,7 @@ use yii\db\ActiveRecord;
  * @property float|null $exam_mark
  * @property string|null $remarks
  * @property int|null $publish_status
+ * @property int $student_courses_id
  */
 class StudentCourse extends ActiveRecord
 {
@@ -87,6 +89,7 @@ class StudentCourse extends ActiveRecord
             'exam_mark' => 'Exam Mark',
             'remarks' => 'Remarks',
             'publish_status' => 'Publish Status',
+            'student_courses_id' => 'Student Courses ID',
         ];
     }
 }

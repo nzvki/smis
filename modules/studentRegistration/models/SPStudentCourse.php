@@ -1,13 +1,8 @@
 <?php
-/**
- * @author Rufusy Idachi <idachirufus@gmail.com>
- */
+
 namespace app\modules\studentRegistration\models;
 
 use Yii;
-use yii\base\InvalidConfigException;
-use yii\db\ActiveRecord;
-use yii\db\Connection;
 
 /**
  * This is the model class for table "smisportal.ex_student_courses".
@@ -31,37 +26,37 @@ use yii\db\Connection;
  * @property float|null $exam_mark
  * @property string|null $remarks
  * @property int|null $publish_status
+ * @property int $student_courses_id
  */
-class SPStudentCourse extends ActiveRecord
+class SPStudentCourse extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
-    public static function tableName(): string
+    public static function tableName()
     {
         return 'smisportal.ex_student_courses';
     }
 
     /**
-     * @return Connection the database connection used by this AR class.
-     * @throws InvalidConfigException
+     * @return \yii\db\Connection the database connection used by this AR class.
      */
-    public static function getDb(): Connection
+    public static function getDb()
     {
-        return Yii::$app->get('db2');
+        return Yii::$app->get('sm_db');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            [['course_registration_id', 'progress_code', 'course_id', 'examtype_code'], 'required'],
+            [['course_registration_id', 'progress_code', 'course_id', 'examtype_code', 'student_courses_id'], 'required'],
             [['final_mark', 'course_mark', 'exam_mark'], 'number'],
             [['last_update'], 'safe'],
-            [['level_of_study', 'final', 'publish_status'], 'default', 'value' => null],
-            [['level_of_study', 'final', 'publish_status'], 'integer'],
+            [['level_of_study', 'final', 'publish_status', 'student_courses_id'], 'default', 'value' => null],
+            [['level_of_study', 'final', 'publish_status', 'student_courses_id'], 'integer'],
             [['course_registration_id'], 'string', 'max' => 100],
             [['progress_code'], 'string', 'max' => 50],
             [['course_id', 'result_status', 'userid'], 'string', 'max' => 20],
@@ -71,13 +66,14 @@ class SPStudentCourse extends ActiveRecord
             [['group_code'], 'string', 'max' => 15],
             [['mrksheet_id'], 'string', 'max' => 60],
             [['remarks'], 'string', 'max' => 240],
+            [['student_courses_id'], 'unique'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels(): array
+    public function attributeLabels()
     {
         return [
             'course_registration_id' => 'Course Registration ID',
@@ -99,6 +95,7 @@ class SPStudentCourse extends ActiveRecord
             'exam_mark' => 'Exam Mark',
             'remarks' => 'Remarks',
             'publish_status' => 'Publish Status',
+            'student_courses_id' => 'Student Courses ID',
         ];
     }
 }

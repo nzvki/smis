@@ -55,10 +55,11 @@ class MarksSearch extends StudentCourse
 
         $query = StudentCourse::find()->alias('sc')
             ->select([
+                'sc.student_courses_id',
                 'sc.course_registration_id',
                 'sc.course_mark',
                 'sc.exam_mark',
-                'sc.final',
+                'sc.final_mark',
                 'sc.grade',
                 'sc.examtype_code',
                 'sc.remarks',

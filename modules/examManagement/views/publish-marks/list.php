@@ -17,6 +17,7 @@ use app\modules\studentRegistration\helpers\SmisHelper;
 use kartik\grid\GridView;
 use kartik\grid\GridViewInterface;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\web\ServerErrorHttpException;
 
 $this->title = $title;
@@ -35,7 +36,17 @@ $this->title = $title;
     <div class="container-fluid">
         <div class="row">
             <div class="col-10 offset-1">
+                <div class="courses">
+                    <div class="loader"></div>
+                    <div class="error-display alert text-center" role="alert"></div>
+                </div>
             <?php
+            $idCol = [
+                'attribute' => 'student_courses_id',
+                'label' => 'REGISTRATION NO.',
+                'vAlign' => 'middle',
+                'width' => '15%'
+            ];
             $regNumberCol = [
                 'attribute' => 'course_registration_id',
                 'label' => 'REGISTRATION NO.',
@@ -69,7 +80,7 @@ $this->title = $title;
                 'vAlign' => 'middle',
                 'width' => '5%',
                 'value' => function($model){
-                    return (empty($model['final'])) ? '--' : $model['final'];
+                    return (empty($model['final_mark'])) ? '--' : $model['final_mark'];
                 }
             ];
             $gradeCol = [
@@ -122,17 +133,20 @@ $this->title = $title;
                     return (empty($model['last_update'])) ? '--' : SmisHelper::formatDate($model['last_update'], 'd-m-Y');
                 }
             ];
-
+            $count = 0;
             $gridColumns = [
                 ['class' => 'kartik\grid\SerialColumn'],
                 [
                     'class' => '\kartik\grid\CheckboxColumn',
-                    'checkboxOptions' => function($model, $key, $index, $widget) {
+                    'checkboxOptions' => function($model, $key, $index, $widget) use (&$count){
+                        $count++;
                         return [
-                            'value' => $model['course_registration_id']
+//                            'value' => $count
+                            'value' => $model['student_courses_id']
                         ];
                     }
                 ],
+                $idCol,
                 $regNumberCol,
                 $courseMarkCol,
                 $examMarkCol,
@@ -175,15 +189,15 @@ $this->title = $title;
                     'toggleDataContainer' => ['class' => 'btn-group mr-2'],
                     'export' => [
                         'fontAwesome' => true,
-                        'label' => 'Export courses'
+                        'label' => 'Export students'
                     ],
                     'panel' => [
                         'heading' => $panelHeader
                     ],
                     'persistResize' => false,
                     'toggleDataOptions' => ['minCount' => 50],
-                    'itemLabelSingle' => 'course',
-                    'itemLabelPlural' => 'courses',
+                    'itemLabelSingle' => 'student',
+                    'itemLabelPlural' => 'students',
                 ]);
             }catch (Throwable $ex) {
                 $message = $ex->getMessage();
@@ -197,3 +211,6 @@ $this->title = $title;
         </div>
     </div>
 </section>
+
+<?php
+$this->render('postMarksToPublish', ['filterLevel' => 'students']);
