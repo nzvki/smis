@@ -56,13 +56,7 @@ $jsonMenu = [
         [
             {'text' : 'Requirements','a_attr':{'href':'javascript:void()'},
             'children' : [
-                { 'text' : 'Program Curriculum Level Requirements','a_attr' : {'href':'exam-Management/org-programmes'},'type':'links' },
-                { 'text' : 'Program Curriculum Level Requirements Old','a_attr' : {'href':'examinationManagement/prog-curr-level-requirement/create'},'type':'links' },
-                { 'text' : 'Program Curriculum Course Group','a_attr' : {'href':'examinationManagement/prog-curr-course-group/create'},'type':'links' },	
-                { 'text' : 'Program Curriculum Group Requirements','a_attr' : {'href':'examinationManagement/prog-curr-group-req-course/create'},'type':'links' },
-                { 'text' : 'Program Curriculum Group Required Course','a_attr' : {'href':'examinationManagement/org-course-prerequisite'},'type':'links' },
-                { 'text' : 'Program Curriculum Level Requirements List','a_attr' : {'href':'examinationManagement/prog-curr-level-requirement/index'},'type':'links' },
-
+                { 'text' : 'Program Curriculum Level Requirements','a_attr' : {'href':'exam-management/org-programmes'},'type':'links' },
             ]}
         ]
     ",

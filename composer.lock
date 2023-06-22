@@ -2083,17 +2083,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "f554b1c5cadb36f00949a9df7aa79395754cb667"
+                "reference": "4b8ef7dd9780531fc997fa23a53a38a1f7674bec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/f554b1c5cadb36f00949a9df7aa79395754cb667",
-                "reference": "f554b1c5cadb36f00949a9df7aa79395754cb667",
+                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/4b8ef7dd9780531fc997fa23a53a38a1f7674bec",
+                "reference": "4b8ef7dd9780531fc997fa23a53a38a1f7674bec",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-krajee-base": ">=3.0.4",
-                "select2/select2": ">=4.0"
+                "select2/select2": ">=4.0.0"
             },
             "default-branch": true,
             "type": "yii2-extension",
@@ -2132,7 +2132,7 @@
             ],
             "support": {
                 "issues": "https://github.com/kartik-v/yii2-widget-select2/issues",
-                "source": "https://github.com/kartik-v/yii2-widget-select2/tree/master"
+                "source": "https://github.com/kartik-v/yii2-widget-select2/tree/v2.2.5"
             },
             "funding": [
                 {
@@ -2140,7 +2140,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-03-30T13:17:08+00:00"
+            "time": "2023-06-22T07:43:31+00:00"
         },
         {
             "name": "kartik-v/yii2-widget-sidenav",
@@ -2209,16 +2209,16 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "3.1.0-beta.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "c9a2e4ffb85eec6a371dd9cd13dd4bdb61fd5988"
+                "reference": "b8174494eda667f7d13876b4a7bfef0f62a7c0d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/c9a2e4ffb85eec6a371dd9cd13dd4bdb61fd5988",
-                "reference": "c9a2e4ffb85eec6a371dd9cd13dd4bdb61fd5988",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/b8174494eda667f7d13876b4a7bfef0f62a7c0d1",
+                "reference": "b8174494eda667f7d13876b4a7bfef0f62a7c0d1",
                 "shasum": ""
             },
             "require": {
@@ -2274,7 +2274,7 @@
             ],
             "support": {
                 "issues": "https://github.com/maennchen/ZipStream-PHP/issues",
-                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.0-beta.1"
+                "source": "https://github.com/maennchen/ZipStream-PHP/tree/3.1.0"
             },
             "funding": [
                 {
@@ -2286,7 +2286,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-04-27T08:01:47+00:00"
+            "time": "2023-06-21T14:59:35+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -4412,12 +4412,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/icons.git",
-                "reference": "fb2fcb123d526ecbc89a79fcec961d23fe355aef"
+                "reference": "2ed42c5f57da16e04fb497603cec26cb727d39db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/icons/zipball/fb2fcb123d526ecbc89a79fcec961d23fe355aef",
-                "reference": "fb2fcb123d526ecbc89a79fcec961d23fe355aef",
+                "url": "https://api.github.com/repos/twbs/icons/zipball/2ed42c5f57da16e04fb497603cec26cb727d39db",
+                "reference": "2ed42c5f57da16e04fb497603cec26cb727d39db",
                 "shasum": ""
             },
             "default-branch": true,
@@ -4444,7 +4444,7 @@
                 "issues": "https://github.com/twbs/icons/issues",
                 "source": "https://github.com/twbs/icons/tree/main"
             },
-            "time": "2023-06-13T20:48:25+00:00"
+            "time": "2023-06-22T13:40:12+00:00"
         },
         {
             "name": "vakata/jstree",
@@ -7732,12 +7732,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "845f20181c7f11ca9564490cc791c2fe91d443ef"
+                "reference": "c7082ff6400cc82b0e950ee31e8e77d76232af1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/845f20181c7f11ca9564490cc791c2fe91d443ef",
-                "reference": "845f20181c7f11ca9564490cc791c2fe91d443ef",
+                "url": "https://api.github.com/repos/symfony/console/zipball/c7082ff6400cc82b0e950ee31e8e77d76232af1f",
+                "reference": "c7082ff6400cc82b0e950ee31e8e77d76232af1f",
                 "shasum": ""
             },
             "require": {
@@ -7814,7 +7814,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-05-30T17:17:10+00:00"
+            "time": "2023-06-20T10:30:43+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -8254,12 +8254,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "30610109879daf79e6042430d56346681801dfcd"
+                "reference": "4415fa3b61b7259aca2bf925ab97c03865072ac5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/30610109879daf79e6042430d56346681801dfcd",
-                "reference": "30610109879daf79e6042430d56346681801dfcd",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/4415fa3b61b7259aca2bf925ab97c03865072ac5",
+                "reference": "4415fa3b61b7259aca2bf925ab97c03865072ac5",
                 "shasum": ""
             },
             "require": {
@@ -8328,7 +8328,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-01T08:31:05+00:00"
+            "time": "2023-06-21T12:09:04+00:00"
         },
         {
             "name": "symfony/yaml",
