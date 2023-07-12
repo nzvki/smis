@@ -36,88 +36,26 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'kartik\grid\SerialColumn'],
 
                     [
-                        'attribute' => 'progCurCourse',
-                        'label' => 'Program Curriculum',
-                        'value' => function($model) {
-                            return $model['prog_curriculum_id']; //." - ".$model['course_name'];
-                        }
-                    ],
-
-                    [
                         'attribute' => 'course',
-                        'label' => 'Min Courses Taken',
+                        'label' => 'Course Group Desc',
                         'value' => function($model) {
-                            return $model['min_courses_taken'];
+                            return $model['course_group_desc'];
                         }
                     ],
                     [
-                        'attribute' => 'Min Pass Courses',
+                        'attribute' => 'Course Group Name',
 
                         'value' => function($model) {
-                            return $model['min_pass_courses'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'GPA Choice',
-
-                        'value' => function($model) {
-                            return $model['gpa_choice'];
+                            return $model['course_group_name'];
                         }
 
                     ],
 
                     [
-                        'attribute' => 'GPA Weight',
+                        'attribute' => 'Course Group Type',
 
                         'value' => function($model) {
-                            return $model['gpa_weight'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'Pass Result',
-
-                        'value' => function($model) {
-                            return $model['pass_result'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'Pass Recommendation',
-
-                        'value' => function($model) {
-                            return $model['pass_recommendation'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'Fail type',
-
-                        'value' => function($model) {
-                            return $model['fail_type'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'Fail Result',
-
-                        'value' => function($model) {
-                            return $model['fail_result'];
-                        }
-
-                    ],
-
-                    [
-                        'attribute' => 'Fail Recommendation',
-
-                        'value' => function($model) {
-                            return $model['fail_recommendation'];
+                            return $model['course_group_type'];
                         }
 
                     ],
@@ -127,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update} ',
                         'buttons' => [
                             'update' => function ($url, $model, $key) {
-                                return  Html::a(' Update', ['/exam-management/prog-curr-level-requirement/update','prog_curr_level_req_id' => $model['prog_curr_level_req_id']], ['class' => ' bi bi-pencil-square btn btn-outline-primary btn-sm']);
+                                return  Html::a(' Update', ['/exam-management/prog-curr-course-group/update','course_group_id' => $model['course_group_id']], ['class' => ' bi bi-pencil-square btn btn-outline-primary btn-sm']);
                             },
                         ]
 

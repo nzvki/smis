@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\models\ProgCurrGroupRequirement;
 use app\models\ProgCurrCourseGroup;
+use app\models\ProgCurrGroupReqCourse;
 use app\models\search\ProgCurrGroupRequirementSearch;
 use yii\web\Request;
 use yii\helpers\ArrayHelper;
@@ -81,16 +82,45 @@ class ProgCurrGroupRequirementController extends Controller
      }
 
 
+/**
+     * Updates an existing ProgCurrLevelRequirement model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $prog_id Prog ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($prog_curr_group_requirement_id)
+    
+    {
+        $id = $this->request->get('prog_curr_group_requirement_id');    
+        $model = ProgCurrGroupRequirement::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->render('view', [
+                'model' => $model   ,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+
     /**
      * Displays a single ProgCurrGroupRequirement model.
-     * @param int $course_group_id Prog Curr Level Req ID
+     * @param int $prog_curr_group_requirement_id Prog Curr Level Req ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($course_group_id)
+    public function actionView($prog_curr_group_requirement_id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($course_group_id),
+            'model' => $this->findModel($prog_curr_group_requirement_id),
         ]);
     }
 
@@ -142,6 +172,15 @@ class ProgCurrGroupRequirementController extends Controller
             $ProgCurrGroupRequirement->gpa_courses = $post['gpa-courses'];
             $ProgCurrGroupRequirement->extra_courses_processing = strtoupper($post['extra-courses']);
 
+            $duplicate = ProgCurrGroupRequirement::find()
+            ->where(['prog_curr_group_requirement_id' => $ProgCurrGroupRequirement->prog_curr_group_requirement_id, 'prog_curr_course_group_id' =>$ProgCurrGroupRequirement->prog_curr_course_group_id]);
+
+            $duplicates = $duplicate->count();
+
+         if ($duplicates > 0) {
+            // Duplicate study level found for the course
+            throw new \Exception('Prog level requirement not saved. Duplicate course group found for the course');
+         }
 
             if(!$ProgCurrGroupRequirement->save()){
                 if(!$ProgCurrGroupRequirement->validate()){

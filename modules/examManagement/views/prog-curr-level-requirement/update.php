@@ -7,8 +7,8 @@ use yii\widgets\ActiveForm;
 /* @var $model app\models\OrgCoursePrerequisite */
 
 $this->title = 'Update Level Requirements';
-$this->params['breadcrumbs'][] = ['label' => 'Examination Management', 'url' => ['/exam-management']];
-$this->params['breadcrumbs'][] = ['label' => 'Course Prerequisites', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Exam Management', 'url' => ['/exam-management']];
+//$this->params['breadcrumbs'][] = ['label' => 'Course Prerequisites', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="org-course-prerequisite-update">
@@ -21,6 +21,19 @@ $this->params['breadcrumbs'][] = 'Update';
 
             <?= $form->field($model, 'prog_curriculum_id')->textInput(['type' => 'number']) ?>
             <?= $form->field($model, 'min_courses_taken')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'prog_study_level')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'min_pass_courses')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'pass_type')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'gpa_choice')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'gpa_courses')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'gpa_weight')->textInput(['type' => 'number']) ?>
+            <?= $form->field($model, 'pass_result')->textInput()?>
+            <?= $form->field($model, 'fail_result')->textInput() ?>
+            <?= $form->field($model, 'pass_recommendation')->textInput() ?>
+            <?= $form->field($model, 'fail_recommendation')->textInput() ?>
+            <?= $form->field($model, 'incomplete_result')->textInput() ?>
+            <?= $form->field($model, 'incomplete_recommendation')->textInput() ?>
+
 
             <div class="form-group">
                 <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>

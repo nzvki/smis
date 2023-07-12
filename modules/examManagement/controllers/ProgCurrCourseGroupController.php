@@ -8,6 +8,10 @@ use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use app\models\ProgCurrCourseGroup;
 use app\models\search\ProgCurrCourseGroupSearch;
+use yii\web\Request;
+use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
+use yii\db\ActiveQuery;
 
 /**
  * ProgCurrCourseGroupController implements the CRUD actions for ProgCurrCourseGroup model.
@@ -33,6 +37,33 @@ class ProgCurrCourseGroupController extends Controller
     }
 
 
+    /**
+     * Updates an existing ProgCurrLevelRequirement model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $prog_id Prog ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($course_group_id)
+    
+    {
+        $id = $this->request->get('course_group_id');    
+        $model = ProgCurrCourseGroup::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->render('view', [
+                'model' => $model   ,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
 
     /**
      * Displays a single ProgCurrCourseGroup model.
@@ -70,7 +101,40 @@ class ProgCurrCourseGroupController extends Controller
         ]);
     }
 
-    
+    public function actionIndex()
+    {
+      // $id = $this->request->get('prog_curr_group_requirement_id');
+       
+       
+       
+        $model = 
+        ProgCurrCourseGroup::find()
+        ->select([
+           'prog_curr_course_group.course_group_id',
+           'prog_curr_course_group.course_group_desc',
+           'prog_curr_course_group.course_group_name',
+           'prog_curr_course_group.course_group_type',
+           ])
+      //  ->innerJoinWith('progCurrCourseName')
+      //  ->where([
+      //     'prog_curr_group_req_course.prog_curr_group_requirement_id' => $id
+        ->asArray()->all();
+
+
+        
+        $provider = new ArrayDataProvider([
+           'allModels' => $model,
+           'pagination' => [
+               'pageSize' => 10,
+           ],
+       ]);
+
+        // Render the view or perform further operations with the related models
+        return $this->render('index', [
+            'searchModel' => $model,
+            'dataProvider' => $provider,
+        ]);
+    }
 
     public function actionSave()
     {
@@ -79,10 +143,20 @@ class ProgCurrCourseGroupController extends Controller
             $post = \Yii::$app->request->post();
                 
             $progCurrCourseGroup = new ProgCurrCourseGroup();
-            $progCurrCourseGroup->course_group_name = $post['group-name'];
-            $progCurrCourseGroup->course_group_desc = $post['group-desc'];
-            $progCurrCourseGroup->course_group_type = $post['group-type'];
+            $progCurrCourseGroup->course_group_name = strtoupper($post['group-name']);
+            $progCurrCourseGroup->course_group_desc = strtoupper($post['group-desc']);
+            $progCurrCourseGroup->course_group_type = strtoupper($post['group-type']);
 
+
+            $duplicate = ProgCurrCourseGroup::find()
+            ->where(['course_group_id' => $progCurrCourseGroup->course_group_id, 'course_group_name' => $progCurrCourseGroup->course_group_name ]);
+
+            $duplicates = $duplicate->count();
+
+         if ($duplicates > 0) {
+            // Duplicate study level found for the course
+            throw new \Exception('Prog Course Group not saved. Duplicate found for the Course group name');
+         }
 
             if(!$progCurrCourseGroup->save()){
                 if(!$progCurrCourseGroup->validate()){

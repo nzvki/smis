@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 // @var $model app\models\ProgCurrLevelRequirement
 
-$this->title = $model->prog_curr_level_req_id;
-$this->params['breadcrumbs'][] = ['label' => 'Prog Curr Level Requirement', 'url' => ['index']];
+$this->title = $model->prog_curr_group_req_course_id;
+$this->params['breadcrumbs'][] = ['label' => 'Prog Curr Required Course', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'prog_curr_level_req_id' => $model->prog_curr_level_req_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'prog_curr_level_req_id' => $model->prog_curr_level_req_id], [
+        <?= Html::a('Update', ['update', 'prog_curr_group_req_course_id' => $model->prog_curr_group_req_course_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'prog_curr_group_req_course_id' => $model->prog_curr_group_req_course_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -29,10 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'prog_curr_level_req_id',
-            'prog_curriculum_id',
-            'prog_study_level',
-            'min_courses_taken',
+            'prog_curr_group_req_course_id',
+            'prog_curr_group_requirement_id',
+            'prog_curriculum_course_id',
+            'credit_factor',
         ],
     ]) ?>
 

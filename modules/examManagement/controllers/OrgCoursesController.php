@@ -39,6 +39,8 @@ class OrgCoursesController extends Controller
      */
     public function actionIndex()
     {
+        $id = $this->request->get('prog_curr_group_requirement_id');
+        
         $searchModel = new OrgCoursesSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 

@@ -1,13 +1,14 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\OrgCourses */
 
 $this->title = 'Update Course Prerequisite';// . $model->course_name;
 $this->params['breadcrumbs'][] = ['label' => 'Examination Management', 'url' => ['/exam-management']];
-$this->params['breadcrumbs'][] = ['label' => 'Course Prerequisites', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Course Group', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="org-course-prerequisite-update">
@@ -16,9 +17,18 @@ $this->params['breadcrumbs'][] = 'Update';
             <h3 class="card-title mb-3">
     <?= Html::encode($this->title) ?></h3>
 
-    <?= $this->render('create', [
-        'model' => $model,
-    ]) ?>
+    <?php $form = ActiveForm::begin(); ?>
+
+            <?= $form->field($model, 'course_group_name')->textInput() ?>
+            <?= $form->field($model, 'course_group_desc')->textInput() ?>
+            <?= $form->field($model, 'course_group_type')->textInput() ?>
+
+            <div class="form-group">
+                <?= Html::submitButton('Update', ['class' => 'btn btn-primary']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+            
 
 </div>
 </div>

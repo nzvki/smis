@@ -38,6 +38,34 @@ class ProgCurrGroupReqCourseController extends Controller
     }
 
 
+    /**
+     * Updates an existing ProgCurrLevelRequirement model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $prog_id Prog ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($prog_curr_group_req_course_id)
+    
+    {
+        $id = $this->request->get('prog_curr_group_req_course_id');    
+        $model = ProgCurrGroupReqCourse::findOne($id);
+
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->render('view', [
+                'model' => $model   ,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
     public function actionIndex()
      {
         $id = $this->request->get('prog_curr_group_requirement_id');
@@ -125,6 +153,16 @@ class ProgCurrGroupReqCourseController extends Controller
             $ProgCurrGroupReqCourse->prog_curriculum_course_id = $post['prog-curriculum-course-id'];
             $ProgCurrGroupReqCourse->credit_factor = $post['credit-factor'];
 
+
+            $duplicate = ProgCurrGroupReqCourse::find()
+            ->where(['prog_curr_group_req_course_id' => $ProgCurrGroupReqCourse->prog_curr_group_req_course_id, 'prog_curriculum_course_id' =>$ProgCurrGroupReqCourse->prog_curriculum_course_id]);
+
+            $duplicates = $duplicate->count();
+
+         if ($duplicates > 0) {
+            // Duplicate study level found for the course
+            throw new \Exception('Prog Curriculum Course Group not saved. Duplicate Course ID found for the course');
+         }
 
             if(!$ProgCurrGroupReqCourse->save()){
                 if(!$ProgCurrGroupReqCourse->validate()){
